@@ -5,8 +5,9 @@ import telegram
 from telegram import Updater
 from telegram import Bot
 
-bot = Bot(token='177224385:AAHwrklE9Yx-nrPvNaXRtGiEM5qH2UWuAKM')
-updater = Updater(token='177224385:AAHwrklE9Yx-nrPvNaXRtGiEM5qH2UWuAKM')
+token = '177224385:AAHwrklE9Yx-nrPvNaXRtGiEM5qH2UWuAKM'
+bot = Bot(token=token)
+updater = Updater(token=token)
 
 dispatcher = updater.dispatcher
 
@@ -20,7 +21,7 @@ bot_rec = re.compile('@' + me.username, re.IGNORECASE)
 
 def start(bot, update):
     active_chats.append(update.message.chat_id)
-    bot.sendMessage(chat_id=update.message.chat_id, text="tâmo junto")
+    bot.sendMessage(chat_id=update.message.chat_id, text="tâmu juntu")
 
 def stop(bot, update):
     active_chats.remove(update.message.chat_id)
