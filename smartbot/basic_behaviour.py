@@ -17,15 +17,11 @@ class BasicBehaviour(Behaviour):
     def addHandlers(self):
         self.dispatcher.addTelegramCommandHandler('start', self.start)
         self.dispatcher.addTelegramCommandHandler('stop', self.stop)
-        self.dispatcher.addTelegramCommandHandler('load', self.load_behaviour)
-        self.dispatcher.addTelegramCommandHandler('unload', self.unload_behaviour)
         self.dispatcher.addTelegramMessageHandler(self.message)
 
     def removeHandlers(self):
         self.dispatcher.removeTelegramCommandHandler('start', self.start)
         self.dispatcher.removeTelegramCommandHandler('stop', self.stop)
-        self.dispatcher.removeTelegramCommandHandler('load', self.load_behaviour)
-        self.dispatcher.removeTelegramCommandHandler('unload', self.unload_behaviour)
         self.dispatcher.removeTelegramMessageHandler(self.message)
 
     def start(self, telegramBot, update):
@@ -35,12 +31,6 @@ class BasicBehaviour(Behaviour):
     def stop(self, telegramBot, update):
         self.__active_chats.remove(update.message.chat_id)
         telegramBot.sendMessage(chat_id=update.message.chat_id, text="gudibai !")
-
-    def load_behaviour(self, telegramBot, update):
-        None
-
-    def unload_behaviour(self, telegramBot, update):
-        None
 
     def message(self, telegramBot, update):
         bot_rec = re.compile('@' + self.botInfo.username, re.IGNORECASE)

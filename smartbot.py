@@ -13,8 +13,10 @@ token = args.token
 bot = smartbot.Bot(token)
 
 bc = smartbot.BehaviourControl(bot)
-bc.add('basic', smartbot.BasicBehaviour)
+bc.add('basic', smartbot.BasicBehaviour(bot))
+bc.add('loader', smartbot.LoaderBehaviour(bot, bc))
 bc.load('basic')
+bc.load('loader')
 
 info = bot.getInfo()
 print 'Botname: %s' % info.username

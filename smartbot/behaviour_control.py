@@ -6,14 +6,14 @@ class BehaviourControl(object):
         self.behaviours = {}
         self.loaded_behaviours = {}
 
-    def add(self, behaviour_name, behaviour_class):
-        self.behaviours[behaviour_name] = behaviour_class
+    def add(self, behaviour_name, behaviour):
+        self.behaviours[behaviour_name] = behaviour
 
     def remove(self, behaviour_name):
         self.behaviours.pop(behaviour_name)
 
     def load(self, behaviour_name):
-        behaviour = self.behaviours[behaviour_name](self.bot)
+        behaviour = self.behaviours[behaviour_name]
         behaviour.load()
         self.loaded_behaviours[behaviour_name] = behaviour
         return behaviour
