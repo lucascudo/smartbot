@@ -1,20 +1,22 @@
 # coding: utf-8
 
-BEHAVIOURS = []
-LOADED_BEHAVIOURS = []
-
 class Behaviour(object):
-    name = None
-
-    def __init__(self, bot, updater):
+    def __init__(self, bot):
         self.bot = bot
-        self.updater = updater
 
     def load(self):
         self.addHandlers()
+        self.onLoad()
 
     def unload(self):
         self.removeHandlers()
+        self.onUnload()
+
+    def onLoad(self):
+        None
+
+    def onUnload(self):
+        None
 
     def addHandlers(self):
         None

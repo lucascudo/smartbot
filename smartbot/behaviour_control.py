@@ -1,9 +1,8 @@
 # coding: utf-8
 
 class BehaviourControl(object):
-    def __init__(self, bot, updater):
+    def __init__(self, bot):
         self.bot = bot
-        self.updater = updater
         self.behaviours = {}
         self.loaded_behaviours = {}
 
@@ -14,7 +13,7 @@ class BehaviourControl(object):
         self.behaviours.pop(behaviour_name)
 
     def load(self, behaviour_name):
-        behaviour = self.behaviours[behaviour_name](self.bot, self.updater)
+        behaviour = self.behaviours[behaviour_name](self.bot)
         behaviour.load()
         self.loaded_behaviours[behaviour_name] = behaviour
         return behaviour
