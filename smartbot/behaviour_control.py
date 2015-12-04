@@ -24,7 +24,6 @@ class BehaviourControl(object):
         else:
             return 'unloaded'
 
-
     def load(self, behaviour_name):
         behaviour = self.behaviours[behaviour_name]
         behaviour.load()

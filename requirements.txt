@@ -1,1 +1,5 @@
--e git+git@github.com:leandrotoledo/python-telegram-bot.git@56ab40d94fc2a4562fe1fe4b04f00643cdcde516#egg=python-telegram-bot
+future==0.15.2
+lxml==3.5.0
+-e git+git@github.com:leandrotoledo/python-telegram-bot.git@56ab40d94fc2a4562fe1fe4b04f00643cdcde516#egg=python_telegram_bot-master
+requests==2.8.1
+wheel==0.24.0

@@ -20,12 +20,12 @@ class LoaderBehaviour(Behaviour):
 
     def load_behaviour(self, telegramBot, update):
         p = re.compile('(.*) (.*)')
-        behaviour_name = p.match(update.message.text).groups()[1]
+        behaviour_name = (p.match(update.message.text).groups()[1] or '').strip()
         if self.behaviour_control.getStatus(behaviour_name) == 'unloaded':
             self.behaviour_control.load(behaviour_name)
 
     def unload_behaviour(self, telegramBot, update):
         p = re.compile('(.*) (.*)')
-        behaviour_name = p.match(update.message.text).groups()[1]
+        behaviour_name = (p.match(update.message.text).groups()[1] or '').strip()
         if self.behaviour_control.getStatus(behaviour_name) == 'loaded':
             self.behaviour_control.unload(behaviour_name)
