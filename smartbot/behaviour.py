@@ -3,14 +3,19 @@
 class Behaviour(object):
     def __init__(self, bot):
         self.bot = bot
+        self.loaded = False
 
     def load(self):
-        self.addHandlers()
-        self.onLoad()
+        if not self.loaded:
+            self.addHandlers()
+            self.onLoad()
+            self.loaded = True
 
     def unload(self):
-        self.removeHandlers()
-        self.onUnload()
+        if self.loaded:
+            self.removeHandlers()
+            self.onUnload()
+            self.loaded = False
 
     def onLoad(self):
         None

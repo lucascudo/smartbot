@@ -10,6 +10,7 @@ arg_parser.add_argument('--token', required=True, dest='token', type=str, help='
 args = arg_parser.parse_args()
 
 token = args.token
+
 bot = smartbot.Bot(token)
 
 bc = smartbot.BehaviourControl(bot)
