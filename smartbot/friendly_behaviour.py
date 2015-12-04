@@ -31,7 +31,6 @@ class FriendlyBehaviour(Behaviour):
         keywords = list(set(self.vocabulary.keys()).intersection(words))
         params = filter(lambda word: word and not word in keywords, words)
         if (keywords):
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text='keywords: %s\nparams: %s' % ((', ').join(keywords), (', ').join(params)))
             command = self.vocabulary[keywords[0]]
             updateMock = DynObject()
             updateMock.message = DynObject()
