@@ -26,11 +26,13 @@ class FriendlyBehaviour(Behaviour):
 
     def callme(self, telegramBot, update):
         message = update.message.text
-        words = re.compile('\W').split(message)
+        words = re.compile('\W', re.UNICODE).split(message)
         words = filter(lambda word: not self.meMatcher.match(word), words)
         keywords = list(set(self.vocabulary.keys()).intersection(words))
         params = filter(lambda word: word and not word in keywords, words)
         if (keywords):
+            # TODO: put console debug message below
+            # telegramBot.sendMessage(chat_id=update.message.chat_id, text='keywords: %s\nparams: %s' % ((', ').join(keywords), (', ').join(params)))
             command = self.vocabulary[keywords[0]]
             updateMock = DynObject()
             updateMock.message = DynObject()

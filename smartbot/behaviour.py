@@ -8,14 +8,14 @@ class Behaviour(object):
     def load(self):
         if not self.loaded:
             self.addHandlers()
-            self.onLoad()
             self.loaded = True
+            self.onLoad()
 
     def unload(self):
         if self.loaded:
             self.removeHandlers()
-            self.onUnload()
             self.loaded = False
+            self.onUnload()
 
     def onLoad(self):
         None

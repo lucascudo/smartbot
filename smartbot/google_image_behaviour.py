@@ -19,8 +19,10 @@ class GoogleImageBehaviour(Behaviour):
         self.dispatcher.removeTelegramCommandHandler('imgsearch', self.imageSearch)
 
     def imageSearch(self, telegramBot, update):
-        p = re.compile('(.*) (.*)')
+        p = re.compile('([^ ]*) (.*)')
         query = (p.match(update.message.text).groups()[1] or '').strip()
+        # TODO: put console debug message below
+        # telegramBot.sendMessage(chat_id=update.message.chat_id, text='query: %s' % query)
         response = requests.get('https://www.google.com.br/search?site=&tbm=isch&q=%s&oq=%s&tbs=isz:l' % (query, query))
         tree = html.fromstring(response.content)
         image_tags = tree.xpath('//img')
