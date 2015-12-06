@@ -13,16 +13,21 @@ token = args.token
 
 bot = smartbot.Bot(token)
 
-vocabulary = { 'manda': 'imgsearch' }
+vocabulary = {
+    'piada': 'joke',
+    'manda': 'image'
+}
 
 bc = smartbot.BehaviourControl(bot)
 bc.add('basic', smartbot.BasicBehaviour(bot))
 bc.add('loader', smartbot.LoaderBehaviour(bot, bc))
 bc.add('friendly', smartbot.FriendlyBehaviour(bot, vocabulary))
+bc.add('joke', smartbot.JokeBehaviour(bot))
 bc.add('google_image', smartbot.GoogleImageBehaviour(bot))
 bc.load('basic')
 bc.load('loader')
 bc.load('friendly')
+bc.load('joke')
 bc.load('google_image')
 
 info = bot.getInfo()

@@ -13,5 +13,8 @@ class Bot:
         self.info = self.info or self.telegramBot.getMe()
         return self.info
 
+    def sendMessage(self, **params):
+        return self.telegramBot.sendMessage(**params)
+
     def listen(self):
         self.updater.start_polling()
