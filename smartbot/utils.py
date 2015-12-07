@@ -15,7 +15,7 @@ class Utils:
 
     @staticmethod
     def logDebug(bot, className, message):
-        output = u'%s %s: %s' % (time.strftime('%D %T'), className, message)
-        print u'%s' % output
+        output = u'%s %s: %s' % (time.strftime('%D %T'), className, message.encode('utf-8'))
+        print output.encode('utf-8')
         if Utils.debug:
             bot.sendMessage(chat_id=Utils.debugOutput, text=output)
