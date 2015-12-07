@@ -28,6 +28,7 @@ class FriendlyBehaviour(Behaviour):
         message = update.message.text
         words = re.compile('\W', re.UNICODE).split(message)
         words = filter(lambda word: not self.mentionMatcher.match(word), words)
+        words = map(lambda word: word.lower(), words)
         keywords = list(set(self.vocabulary.keys()).intersection(words))
         params = filter(lambda word: word and not word in keywords, words)
         if (keywords):
