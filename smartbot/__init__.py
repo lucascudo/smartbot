@@ -12,3 +12,4 @@ from .translate_behaviour import TranslateBehaviour
 from .joke_behaviour import JokeBehaviour
 from .nasa_behaviour import NasaBehaviour
 from .friendly_behaviour import FriendlyBehaviour
+from .talk_behaviour import TalkBehaviour

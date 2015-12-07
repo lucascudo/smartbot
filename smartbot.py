@@ -14,6 +14,8 @@ token = args.token
 bot = smartbot.Bot(token)
 
 vocabulary = {
+    'diga': 'talk',
+    'fale': 'talk',
     'traduz': 'translateen',
     'traduza': 'translateen',
     'nasa': 'nasa',
@@ -29,6 +31,7 @@ bc.add('translate', smartbot.TranslateBehaviour(bot))
 bc.add('joke', smartbot.JokeBehaviour(bot))
 bc.add('google_image', smartbot.GoogleImageBehaviour(bot))
 bc.add('nasa', smartbot.NasaBehaviour(bot))
+bc.add('talk', smartbot.TalkBehaviour(bot))
 bc.load('basic')
 bc.load('loader')
 bc.load('friendly')

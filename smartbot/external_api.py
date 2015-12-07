@@ -4,11 +4,11 @@ from smartbot import Utils
 
 import requests
 import re
+import tempfile
 
 class ExternalAPI:
     @staticmethod
-    def translate(text, fromLanguage=None, toLanguage=None):
-        fromLanguage = fromLanguage or 'en'
+    def translate(text, fromLanguage='en', toLanguage=None):
         if not toLanguage:
             toLanguage = 'pt' if fromLanguage == 'en' else 'en'
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
@@ -21,3 +21,13 @@ class ExternalAPI:
             resultParsed = [text, 'Não consigo traduzir']
         result = resultParsed[0]
         return result
+
+    @staticmethod
+    def talk(text, language='pt'):
+        headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
+        response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + text + '&tl=' + language + '&total=1&idx=0&textlen=4&tk=597433.997738&client=t&prev=input', headers=headers)
+        fileName = tempfile.mkstemp()[1]
+        fd = file(fileName, 'wb')
+        fd.write(response.content)
+        fd.close()
+        return fileName

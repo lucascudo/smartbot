@@ -1,11 +1,9 @@
 # coding: utf-8
 
 from smartbot import Behaviour
-from smartbot import Utils
 from smartbot import ExternalAPI
 
 import re
-import requests
 
 class TranslateBehaviour(Behaviour):
     def __init__(self, bot):
