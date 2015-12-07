@@ -20,8 +20,9 @@ class NasaBehaviour(Behaviour):
     def nasaSearch(self, telegramBot, update):
         self.logDebug('Nasa search (chat_id: %s)' % update.message.chat_id)
         tree = Utils.crawlUrl('http://apod.nasa.gov')
-        image_tags = tree.xpath('//img[contains(@src,"image")]')
-        p_tags = tree.xpath('//p')
-        if image_tags:
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text='http://apod.nasa.gov/%s' % random.choice(image_tags).attrib['src'])
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text=p_tags[2].text_content())
+        imageTags = tree.xpath('//img[contains(@src,"image")]')
+        pTags = tree.xpath('//p')
+        if imageTags:
+            telegramBot.sendMessage(chat_id=update.message.chat_id, text='http://apod.nasa.gov/%s' % random.choice(imageTags).attrib['src'])
+            if len(pTags) >= 3:
+                telegramBot.sendMessage(chat_id=update.message.chat_id, text=pTags[2].text_content())

@@ -25,6 +25,6 @@ class JokeBehaviour(Behaviour):
             tree = Utils.crawlUrl('http://www.piadasnet.com/index.php?pesquisaCampo=%s&btpesquisa=OK&pesquisaInicio=0' % query)
         else:
             tree = Utils.crawlUrl('http://www.piadasnet.com/')
-        joke_tags = tree.xpath('//*[contains(@class, "piada")]')
-        if joke_tags:
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text=random.choice(joke_tags).text_content())
+        jokeTags = tree.xpath('//*[contains(@class, "piada")]')
+        if jokeTags:
+            telegramBot.sendMessage(chat_id=update.message.chat_id, text=random.choice(jokeTags).text_content())

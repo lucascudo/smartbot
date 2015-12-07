@@ -6,7 +6,7 @@ from smartbot import Utils
 import re
 
 class BasicBehaviour(Behaviour):
-    __active_chats = []
+    __activeChats = []
 
     def __init__(self, bot):
         super(BasicBehaviour, self).__init__(bot)
@@ -28,11 +28,11 @@ class BasicBehaviour(Behaviour):
         self.dispatcher.removeTelegramMessageHandler(self.message)
 
     def start(self, telegramBot, update):
-        self.__active_chats.append(update.message.chat_id)
+        self.__activeChats.append(update.message.chat_id)
         telegramBot.sendMessage(chat_id=update.message.chat_id, text="tâmu juntu")
 
     def stop(self, telegramBot, update):
-        self.__active_chats.remove(update.message.chat_id)
+        self.__activeChats.remove(update.message.chat_id)
         telegramBot.sendMessage(chat_id=update.message.chat_id, text="gudibai !")
 
     def debug(self, telegramBot, update):

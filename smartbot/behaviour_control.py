@@ -4,32 +4,40 @@ class BehaviourControl(object):
     def __init__(self, bot):
         self.bot = bot
         self.behaviours = {}
-        self.loaded_behaviours = {}
+        self.loadedBehaviours = {}
 
-    def add(self, behaviour_name, behaviour):
-        behaviour = self.behaviours[behaviour_name] = behaviour
+    def add(self, behaviourName, behaviour):
+        behaviour = self.behaviours[behaviourName] = behaviour
         return behaviour
 
-    def remove(self, behaviour_name):
-        return self.behaviours.pop(behaviour_name)
+    def remove(self, behaviourName):
+        return self.behaviours.pop(behaviourName)
 
-    def hasBehaviour(self, behaviour_name):
-        return not not self.behaviours.get(behaviour_name)
+    def hasBehaviour(self, behaviourName):
+        return not not self.behaviours.get(behaviourName)
 
-    def getStatus(self, behaviour_name):
-        if not self.hasBehaviour(behaviour_name):
+    def getStatus(self, behaviourName):
+        if not self.hasBehaviour(behaviourName):
             return 'unknown'
-        elif behaviour_name in self.loaded_behaviours:
+        elif behaviourName in self.loadedBehaviours:
             return 'loaded'
         else:
             return 'unloaded'
 
-    def load(self, behaviour_name):
-        behaviour = self.behaviours[behaviour_name]
+    def load(self, behaviourName):
+        behaviour = self.behaviours[behaviourName]
         behaviour.load()
-        self.loaded_behaviours[behaviour_name] = behaviour
+        self.loadedBehaviours[behaviourName] = behaviour
         return behaviour
 
-    def unload(self, behaviour_name):
-        self.loaded_behaviours[behaviour_name].unload()
-        return self.loaded_behaviours.pop(behaviour_name)
+    def unload(self, behaviourName):
+        self.loadedBehaviours[behaviourName].unload()
+        return self.loadedBehaviours.pop(behaviourName)
+
+    def loadAll(self):
+        [self.load(behaviourName) for behaviourName in self.behaviours if behaviourName not in self.loadedBehaviours]
+
+    def unloadAll(self):
+        loadedReversed = list(loadedBehaviours)
+        loadedReversed.reverse()
+        [self.unload(behaviourName) for behaviourName in (loadedReversed)]
