@@ -36,7 +36,7 @@ class BasicBehaviour(Behaviour):
         telegramBot.sendMessage(chat_id=update.message.chat_id, text="gudibai !")
 
     def debug(self, telegramBot, update):
-        matcher = re.compile('([^ ]*) ?(here|\d+)? ?(on|off)?')
+        matcher = re.compile('([^ ]*) ?(here|\d+)? ?(on|off)?', re.IGNORECASE)
         groups = matcher.match(update.message.text).groups()
         if groups[2]:
             Utils.debug = True if (groups[2].lower() == 'on') else False
