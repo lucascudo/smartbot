@@ -14,6 +14,7 @@ token = args.token
 bot = smartbot.Bot(token)
 
 vocabulary = {
+    'standup': 'jalk',
     'diga': 'talk',
     'fale': 'talk',
     'traduz': 'translateen',

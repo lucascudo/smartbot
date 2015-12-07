@@ -2,6 +2,7 @@
 
 from smartbot import Behaviour
 from smartbot import Utils
+from smartbot import ExternalAPI
 
 import re
 import random
@@ -13,9 +14,11 @@ class JokeBehaviour(Behaviour):
 
     def addHandlers(self):
         self.dispatcher.addTelegramCommandHandler('joke', self.jokeSearch)
+        self.dispatcher.addTelegramCommandHandler('jalk', self.jalkSearch)
 
     def removeHandlers(self):
         self.dispatcher.removeTelegramCommandHandler('joke', self.jokeSearch)
+        self.dispatcher.removeTelegramCommandHandler('jalk', self.jalkSearch)
 
     def jokeSearch(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
@@ -28,3 +31,23 @@ class JokeBehaviour(Behaviour):
         jokeTags = tree.xpath('//*[contains(@class, "piada")]')
         if jokeTags:
             telegramBot.sendMessage(chat_id=update.message.chat_id, text=random.choice(jokeTags).text_content())
+
+    def jalkSearch(self, telegramBot, update):
+        p = re.compile('([^ ]*) (.*)')
+        query = (p.match(update.message.text).groups()[1] or '').strip()
+        self.logDebug(u'Jalk search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
+        if query:
+            tree = Utils.crawlUrl('http://www.piadasnet.com/index.php?pesquisaCampo=%s&btpesquisa=OK&pesquisaInicio=0' % query)
+        else:
+            tree = Utils.crawlUrl('http://www.piadasnet.com/')
+        jokeTags = tree.xpath('//*[contains(@class, "piada")]')
+        if jokeTags:
+            contents = map(lambda c: c.text_content(), jokeTags)
+            contents = filter(lambda c: len(re.split('\W+', c, re.MULTILINE)) < 50, contents)
+            contents = sorted(contents, lambda x, y: len(x) - len(y))
+            if contents:
+                content = contents[0]
+                audioFile = ExternalAPI.talk(content, 'pt')
+                self.bot.sendVoice(chat_id=update.message.chat_id, voice=audioFile)
+            else:
+                telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei piada curta')
