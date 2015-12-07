@@ -19,7 +19,7 @@ class NasaBehaviour(Behaviour):
 
     def nasaSearch(self, telegramBot, update):
         self.logDebug('Nasa search (chat_id: %s)' % update.message.chat_id)
-        tree = utils.crawlUrl('http://apod.nasa.gov')
+        tree = Utils.crawlUrl('http://apod.nasa.gov')
         image_tags = tree.xpath('//img[contains(@src,"image")]')
         p_tags = tree.xpath('//p')
         if image_tags:
