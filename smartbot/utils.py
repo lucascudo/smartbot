@@ -16,6 +16,6 @@ class Utils:
     @staticmethod
     def logDebug(bot, className, message):
         output = u'%s %s: %s' % (time.strftime('%D %T'), className, message)
-        print output
+        print u'%s' % output
         if Utils.debug:
             bot.sendMessage(chat_id=Utils.debugOutput, text=output)
