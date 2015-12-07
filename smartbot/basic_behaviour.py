@@ -52,9 +52,10 @@ class BasicBehaviour(Behaviour):
             telegramBot.sendMessage(chat_id=update.message.chat_id, text="debug OFF")
 
     def message(self, telegramBot, update):
-        bot_rec = re.compile('@' + self.botInfo.username, re.IGNORECASE)
-        if bot_rec.match(update.message.text):
-            if update.message.chat_id in self.__activeChats:
-                telegramBot.sendMessage(chat_id=update.message.chat_id, text="iscutei")
-            else:
-                telegramBot.sendMessage(chat_id=update.message.chat_id, text="tô durminu")
+        pass
+        # bot_rec = re.compile('@' + self.botInfo.username, re.IGNORECASE)
+        # if bot_rec.match(update.message.text):
+        #     if update.message.chat_id in self.__activeChats:
+        #         telegramBot.sendMessage(chat_id=update.message.chat_id, text="iscutei")
+        #     else:
+        #         telegramBot.sendMessage(chat_id=update.message.chat_id, text="tô durminu")
