@@ -1,12 +1,13 @@
 # coding: utf-8
 
+from smartbot import Utils
+
 import time
 
 class Behaviour(object):
     def __init__(self, bot):
         self.bot = bot
         self.loaded = False
-        self.debug = True
 
     def load(self):
         if not self.loaded:
@@ -23,8 +24,7 @@ class Behaviour(object):
             self.onUnload()
 
     def logDebug(self, message):
-        if self.debug:
-            print '%s %s: %s' % (time.strftime('%D %T'), self.__class__.__name__, message)
+        Utils.logDebug(self.bot, self.__class__.__name__, message)
 
     def onLoad(self):
         None

@@ -19,7 +19,7 @@ class BehaviourControl(object):
     def getStatus(self, behaviour_name):
         if not self.hasBehaviour(behaviour_name):
             return 'unknown'
-        elif behaviour_name in loaded_behaviours:
+        elif behaviour_name in self.loaded_behaviours:
             return 'loaded'
         else:
             return 'unloaded'
