@@ -1,10 +1,9 @@
 # coding: utf-8
 
 from smartbot import Behaviour
+from smartbot import Utils
 
 import re
-from lxml import html
-import requests
 import random
 
 class GoogleImageBehaviour(Behaviour):
@@ -22,8 +21,7 @@ class GoogleImageBehaviour(Behaviour):
         p = re.compile('([^ ]*) (.*)')
         query = (p.match(update.message.text).groups()[1] or '').strip()
         self.logDebug('Image search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
-        response = requests.get('https://www.google.com.br/search?site=&tbm=isch&q=%s&oq=%s&tbs=isz:l' % (query, query))
-        tree = html.fromstring(response.content)
+        tree = Utils.crawlUrl('https://www.google.com.br/search?site=&tbm=isch&q=%s&oq=%s&tbs=isz:l' % (query, query))
         image_tags = tree.xpath('//img')
         image_sources = map(lambda img: img.attrib['src'], image_tags)
         p = re.compile('.*gstatic.*')

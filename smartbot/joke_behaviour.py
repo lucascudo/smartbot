@@ -1,10 +1,9 @@
 # coding: utf-8
 
 from smartbot import Behaviour
+from smartbot import Utils
 
 import re
-from lxml import html
-import requests
 import random
 
 class JokeBehaviour(Behaviour):
@@ -23,10 +22,9 @@ class JokeBehaviour(Behaviour):
         query = (p.match(update.message.text).groups()[1] or '').strip()
         self.logDebug('Joke search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
         if query:
-            response = requests.get('http://www.piadasnet.com/index.php?pesquisaCampo=%s&btpesquisa=OK&pesquisaInicio=0' % query)
+            tree = Utils.crawlUrl('http://www.piadasnet.com/index.php?pesquisaCampo=%s&btpesquisa=OK&pesquisaInicio=0' % query)
         else:
-            response = requests.get('http://www.piadasnet.com/')
-        tree = html.fromstring(response.content)
+            tree = Utils.crawlUrl('http://www.piadasnet.com/')
         joke_tags = tree.xpath('//*[contains(@class, "piada")]')
         if joke_tags:
             telegramBot.sendMessage(chat_id=update.message.chat_id, text=random.choice(joke_tags).text_content())
