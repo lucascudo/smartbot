@@ -20,7 +20,7 @@ class JokeBehaviour(Behaviour):
     def jokeSearch(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
         query = (p.match(update.message.text).groups()[1] or '').strip()
-        self.logDebug('Joke search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
+        self.logDebug(u'Joke search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
         if query:
             tree = Utils.crawlUrl('http://www.piadasnet.com/index.php?pesquisaCampo=%s&btpesquisa=OK&pesquisaInicio=0' % query)
         else:

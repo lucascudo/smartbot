@@ -18,7 +18,7 @@ class NasaBehaviour(Behaviour):
         self.dispatcher.removeTelegramCommandHandler('nasa', self.nasaSearch)
 
     def nasaSearch(self, telegramBot, update):
-        self.logDebug('Nasa search (chat_id: %s)' % update.message.chat_id)
+        self.logDebug(u'Nasa search (chat_id: %s)' % update.message.chat_id)
         tree = Utils.crawlUrl('http://apod.nasa.gov')
         imageTags = tree.xpath('//img[contains(@src,"image")]')
         pTags = tree.xpath('//p')

@@ -20,7 +20,7 @@ class GoogleImageBehaviour(Behaviour):
     def imageSearch(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
         query = (p.match(update.message.text).groups()[1] or '').strip()
-        self.logDebug('Image search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
+        self.logDebug(u'Image search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
         tree = Utils.crawlUrl('https://www.google.com.br/search?site=&tbm=isch&q=%s&oq=%s&tbs=isz:l' % (query, query))
         imageTags = tree.xpath('//img')
         imageSources = map(lambda img: img.attrib['src'], imageTags)
