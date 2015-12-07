@@ -2,9 +2,11 @@
 
 from smartbot import Utils
 
-import requests
 import re
+import os
 import tempfile
+import subprocess
+import requests
 
 class ExternalAPI:
     @staticmethod
@@ -26,8 +28,11 @@ class ExternalAPI:
     def talk(text, language='pt'):
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
         response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + text + '&tl=' + language + '&total=1&idx=0&textlen=4&tk=597433.997738&client=t&prev=input', headers=headers)
-        fileName = tempfile.mkstemp()[1]
-        fd = file(fileName, 'wb')
+        baseName = tempfile.mkstemp()[1]
+        mp3Name = baseName + '.mp3'
+        oggName = baseName + '.ogg'
+        fd = file(mp3Name, 'wb')
         fd.write(response.content)
         fd.close()
-        return fileName
+        subprocess.call(('ffmpeg -v -8 -i %s -acodec libvorbis %s' % (mp3Name, oggName)).split(' '))
+        return oggName

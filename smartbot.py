@@ -39,6 +39,7 @@ bc.load('translate')
 bc.load('joke')
 bc.load('google_image')
 bc.load('nasa')
+bc.load('talk')
 
 info = bot.getInfo()
 print 'Botname: %s' % info.username

@@ -5,7 +5,7 @@ from smartbot import ExternalAPI
 
 import re
 
-class TranslateBehaviour(Behaviour):
+class TalkBehaviour(Behaviour):
     def __init__(self, bot):
         super(TalkBehaviour, self).__init__(bot)
         self.dispatcher = bot.dispatcher;
@@ -21,4 +21,4 @@ class TranslateBehaviour(Behaviour):
         query = (p.match(update.message.text).groups()[1] or '').strip()
         self.logDebug(u'Talk (chat_id: %s, query: %s, source_language: pt)' % (update.message.chat_id, query or 'None'))
         audioFile = ExternalAPI.talk(query, 'pt')
-        telegramBot.sendAudio(chat_id=update.message.chat_id, audio=audioFile)
+        self.bot.sendVoice(chat_id=update.message.chat_id, voice=audioFile)
