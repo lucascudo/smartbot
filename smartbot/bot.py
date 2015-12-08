@@ -20,8 +20,17 @@ class Bot:
         return self.telegramBot.sendMessage(**params)
 
     def sendVoice(self, **kargs):
-        files = { 'chat_id': ('', io.StringIO(unicode(str(kargs['chat_id'])))), 'voice': ('voice.ogg', open(kargs['voice'], 'rb'), 'application/octet-stream') }
+        files = { 'chat_id': ('', io.StringIO(unicode(str(kargs['chat_id'])))),
+                'voice': ('voice.ogg', open(kargs['voice'], 'rb'), 'application/octet-stream') }
         requests.post('https://api.telegram.org/bot' + self.token + '/sendVoice', files=files)
+
+    def sendAudio(self, **kargs):
+        files = { 'chat_id': ('', io.StringIO(unicode(str(kargs['chat_id'])))),
+                'performer': ('', io.StringIO(unicode(str(kargs.get('performer') or 'bot')))),
+                'title': ('', io.StringIO(unicode(str(kargs.get('title') or 'talk')))),
+                'mime_type': ('', io.StringIO(u'audio/mpeg')),
+                'audio': ('audio.mp3', open(kargs['audio'], 'rb'), 'application/octet-stream') }
+        requests.post('https://api.telegram.org/bot' + self.token + '/sendAudio', files=files)
 
     def listen(self):
         self.updater.start_polling()

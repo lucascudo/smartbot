@@ -25,14 +25,19 @@ class ExternalAPI:
         return result
 
     @staticmethod
-    def talk(text, language='pt'):
+    def textToSpeech(text, language='pt', encode='mp3'):
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
         response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + text + '&tl=' + language + '&total=1&idx=0&textlen=4&tk=597433.997738&client=t&prev=input', headers=headers)
         baseName = tempfile.mkstemp()[1]
         mp3Name = baseName + '.mp3'
-        oggName = baseName + '.ogg'
         fd = file(mp3Name, 'wb')
         fd.write(response.content)
         fd.close()
-        subprocess.call(('ffmpeg -v -8 -i %s -acodec libvorbis %s' % (mp3Name, oggName)).split(' '))
-        return oggName
+        if encode == 'mp3':
+            return mp3Name
+        elif encode == 'ogg':
+            oggName = baseName + '.ogg'
+            subprocess.call(('ffmpeg -v -8 -i %s -acodec libvorbis %s' % (mp3Name, oggName)).split(' '))
+            return oggName
+        else:
+            return None
