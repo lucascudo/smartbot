@@ -50,7 +50,7 @@ class JokeBehaviour(Behaviour):
                 content = contents[0]
                 audioFile = ExternalAPI.textToSpeech(content, language='pt', encode='mp3')
                 if os.path.exists(audioFile) and os.path.getsize(audioFile) > 0:
-                    self.bot.sendAudio(chat_id=update.message.chat_id, audio=audioFile, title=query, performer=self.bot.getInfo().username)
+                    self.bot.sendAudio(chat_id=update.message.chat_id, audio=audioFile, performer=self.bot.getInfo().username)
                 else:
                     telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não consigo contar')
             else:
