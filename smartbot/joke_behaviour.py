@@ -25,30 +25,21 @@ class JokeBehaviour(Behaviour):
         p = re.compile('([^ ]*) (.*)')
         query = (p.match(update.message.text).groups()[1] or '').strip()
         self.logDebug(u'Joke search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
-        if query:
-            tree = Utils.crawlUrl('http://www.piadasnet.com/index.php?pesquisaCampo=%s&btpesquisa=OK&pesquisaInicio=0' % query)
-        else:
-            tree = Utils.crawlUrl('http://www.piadasnet.com/')
-        jokeTags = tree.xpath('//*[contains(@class, "piada")]')
-        if jokeTags:
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text=random.choice(jokeTags).text_content())
+        jokes = ExternalAPI.searchJoke(query)
+        if jokes:
+            telegramBot.sendMessage(chat_id=update.message.chat_id, text=random.choice(jokes))
 
     def jalkSearch(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
         query = (p.match(update.message.text).groups()[1] or '').strip()
         self.logDebug(u'Jalk search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
-        if query:
-            tree = Utils.crawlUrl('http://www.piadasnet.com/index.php?pesquisaCampo=%s&btpesquisa=OK&pesquisaInicio=0' % query)
-        else:
-            tree = Utils.crawlUrl('http://www.piadasnet.com/')
-        jokeTags = tree.xpath('//*[contains(@class, "piada")]')
-        if jokeTags:
-            contents = map(lambda c: c.text_content(), jokeTags)
-            contents = filter(lambda c: len(re.split('\W+', c, re.MULTILINE)) < 70, contents)
-            contents = sorted(contents, lambda x, y: len(x) - len(y))
-            if contents:
-                content = contents[0]
-                audioFile = ExternalAPI.textToSpeech(content, language='pt', encode='mp3')
+        jokes = ExternalAPI.searchJoke(query)
+        if jokes:
+            jokes = filter(lambda c: len(re.split('\W+', c, re.MULTILINE)) < 70, jokes)
+            jokes = sorted(jokes, lambda x, y: len(x) - len(y))
+            if jokes:
+                joke = jokes[0]
+                audioFile = ExternalAPI.textToSpeech(joke, language='pt', encode='mp3')
                 if os.path.exists(audioFile) and os.path.getsize(audioFile) > 0:
                     self.bot.sendAudio(chat_id=update.message.chat_id, audio=audioFile, performer=self.bot.getInfo().username)
                 else:

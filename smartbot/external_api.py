@@ -41,3 +41,12 @@ class ExternalAPI:
             return oggName
         else:
             return None
+
+    @staticmethod
+    def searchJoke(query=None):
+        if query:
+            tree = Utils.crawlUrl('http://www.piadasnet.com/index.php?pesquisaCampo=%s&btpesquisa=OK&pesquisaInicio=0' % query)
+        else:
+            tree = Utils.crawlUrl('http://www.piadasnet.com/')
+        jokeTags = tree.xpath('//p[contains(@class, "piada")]')
+        return map(lambda t: t.text_content(), jokeTags)
