@@ -21,13 +21,15 @@ class TranslateBehaviour(Behaviour):
     def translateen(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
         query = (p.match(update.message.text).groups()[1] or '').strip()
-        self.logDebug(u'Translate (chat_id: %s, query: %s, source_language: en)' % (update.message.chat_id, query or 'None'))
-        result = ExternalAPI.translate(query, 'en', 'pt')
-        telegramBot.sendMessage(chat_id=update.message.chat_id, text=result)
+        if query:
+            self.logDebug(u'Translate (chat_id: %s, query: %s, source_language: en)' % (update.message.chat_id, query or 'None'))
+            result = ExternalAPI.translate(query, 'en', 'pt')
+            telegramBot.sendMessage(chat_id=update.message.chat_id, text=result)
 
     def translatept(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
         query = (p.match(update.message.text).groups()[1] or '').strip()
-        self.logDebug(u'Translate (chat_id: %s, query: %s, source_language: pt)' % (update.message.chat_id, query or 'None'))
-        result = ExternalAPI.translate(query, 'pt', 'en')
-        telegramBot.sendMessage(chat_id=update.message.chat_id, text=result)
+        if query:
+            self.logDebug(u'Translate (chat_id: %s, query: %s, source_language: pt)' % (update.message.chat_id, query or 'None'))
+            result = ExternalAPI.translate(query, 'pt', 'en')
+            telegramBot.sendMessage(chat_id=update.message.chat_id, text=result)

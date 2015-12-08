@@ -19,6 +19,7 @@ class TalkBehaviour(Behaviour):
     def talk(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
         query = (p.match(update.message.text).groups()[1] or '').strip()
-        self.logDebug(u'Talk (chat_id: %s, query: %s, source_language: pt)' % (update.message.chat_id, query or 'None'))
-        audioFile = ExternalAPI.talk(query, 'pt')
-        self.bot.sendVoice(chat_id=update.message.chat_id, voice=audioFile)
+        if query:
+            self.logDebug(u'Talk (chat_id: %s, query: %s, source_language: pt)' % (update.message.chat_id, query or 'None'))
+            audioFile = ExternalAPI.talk(query, 'pt')
+            self.bot.sendVoice(chat_id=update.message.chat_id, voice=audioFile)
