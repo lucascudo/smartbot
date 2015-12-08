@@ -5,6 +5,7 @@ from smartbot import Utils
 from smartbot import ExternalAPI
 
 import re
+import os
 import random
 
 class JokeBehaviour(Behaviour):
@@ -43,11 +44,14 @@ class JokeBehaviour(Behaviour):
         jokeTags = tree.xpath('//*[contains(@class, "piada")]')
         if jokeTags:
             contents = map(lambda c: c.text_content(), jokeTags)
-            contents = filter(lambda c: len(re.split('\W+', c, re.MULTILINE)) < 50, contents)
+            contents = filter(lambda c: len(re.split('\W+', c, re.MULTILINE)) < 70, contents)
             contents = sorted(contents, lambda x, y: len(x) - len(y))
             if contents:
                 content = contents[0]
                 audioFile = ExternalAPI.talk(content, 'pt')
-                self.bot.sendVoice(chat_id=update.message.chat_id, voice=audioFile)
+                if os.path.getsize(audioFile) > 0:
+                    self.bot.sendVoice(chat_id=update.message.chat_id, voice=audioFile)
+                else:
+                    telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não consigo contar')
             else:
                 telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei piada curta')
