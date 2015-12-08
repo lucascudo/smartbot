@@ -1,10 +1,9 @@
 # coding: utf-8
 
 from smartbot import Behaviour
-from smartbot import Utils
+from smartbot import ExternalAPI
 
 import re
-import random
 
 class GoogleImageBehaviour(Behaviour):
     def __init__(self, bot):
@@ -21,9 +20,8 @@ class GoogleImageBehaviour(Behaviour):
         p = re.compile('([^ ]*) (.*)')
         query = (p.match(update.message.text).groups()[1] or '').strip()
         self.logDebug(u'Image search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
-        tree = Utils.crawlUrl('https://www.google.com.br/search?site=&tbm=isch&q=%s&oq=%s&tbs=isz:l' % (query, query))
-        imageTags = tree.xpath('//img')
-        imageSources = map(lambda img: img.attrib['src'], imageTags)
-        p = re.compile('.*gstatic.*')
-        imageSources = filter(lambda source: p.match(source), imageSources)
-        telegramBot.sendMessage(chat_id=update.message.chat_id, text=random.choice(imageSources))
+        imageSources = ExternalAPI.searchImage(query)
+        if imageSources:
+            telegramBot.sendMessage(chat_id=update.message.chat_id, text=imageSources[0])
+        else:
+            telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei imagem relacionada')

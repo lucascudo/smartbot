@@ -50,3 +50,12 @@ class ExternalAPI:
             tree = Utils.crawlUrl('http://www.piadasnet.com/')
         jokeTags = tree.xpath('//p[contains(@class, "piada")]')
         return map(lambda t: t.text_content(), jokeTags)
+
+    @staticmethod
+    def searchImage(query):
+        tree = Utils.crawlUrl('https://www.google.com.br/search?site=&tbm=isch&q=%s&oq=%s&tbs=isz:l' % (query, query))
+        imageTags = tree.xpath('//img')
+        imageSources = map(lambda img: img.attrib['src'], imageTags)
+        p = re.compile('.*gstatic.*')
+        imageSources = filter(lambda source: p.match(source), imageSources)
+        return imageSources
