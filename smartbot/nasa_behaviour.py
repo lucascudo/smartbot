@@ -1,7 +1,7 @@
 # coding: utf-8
 
 from smartbot import Behaviour
-from smartbot import Utils
+from smartbot import ExternalAPI
 
 import re
 import random
@@ -19,10 +19,9 @@ class NasaBehaviour(Behaviour):
 
     def nasaSearch(self, telegramBot, update):
         self.logDebug(u'Nasa search (chat_id: %s)' % update.message.chat_id)
-        tree = Utils.crawlUrl('http://apod.nasa.gov')
-        imageTags = tree.xpath('//img[contains(@src,"image")]')
-        pTags = tree.xpath('//p')
-        if imageTags:
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text='http://apod.nasa.gov/%s' % random.choice(imageTags).attrib['src'])
-            if len(pTags) >= 3:
-                telegramBot.sendMessage(chat_id=update.message.chat_id, text=pTags[2].text_content())
+        nasaData = ExternalAPI.getNasaIOD()
+        if nasaData:
+            telegramBot.sendMessage(chat_id=update.message.chat_id, text=nasaData['imageSource'])
+            telegramBot.sendMessage(chat_id=update.message.chat_id, text=nasaData['explanation'])
+        else:
+            telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei imagem da nasa')

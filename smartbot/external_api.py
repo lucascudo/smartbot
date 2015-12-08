@@ -59,3 +59,14 @@ class ExternalAPI:
         p = re.compile('.*gstatic.*')
         imageSources = filter(lambda source: p.match(source), imageSources)
         return imageSources
+
+    @staticmethod
+    def getNasaIOD():
+        tree = Utils.crawlUrl('http://apod.nasa.gov')
+        imageTags = tree.xpath('//img[contains(@src,"image")]')
+        pTags = tree.xpath('//p')
+        if imageTags and len(pTags) >= 3:
+            result = { 'imageSource': 'http://apod.nasa.gov/%s' % imageTags[0].attrib['src'], 'explanation': pTags[2].text_content() }
+            return result
+        else:
+            return None
