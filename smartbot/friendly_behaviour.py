@@ -31,7 +31,7 @@ class FriendlyBehaviour(Behaviour):
         words = map(lambda word: word.lower(), words)
         keywords = list(set(self.vocabulary.keys()).intersection(words))
         params = filter(lambda word: word and not word in keywords, words)
-        if (keywords):
+        if keywords:
             self.logDebug(u'Friendly mention (chat_id: %s, keywords: %s, params: %s)' % (update.message.chat_id, ('|').join(keywords), (' ').join(params or ['None'])))
             command = self.vocabulary[keywords[0]]
             updateMock = DynObject()

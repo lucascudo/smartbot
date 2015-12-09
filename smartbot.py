@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import sys
+import os
 import re
 import argparse
 import smartbot
@@ -33,6 +34,7 @@ bc.add('joke', smartbot.JokeBehaviour(bot))
 bc.add('google_image', smartbot.GoogleImageBehaviour(bot))
 bc.add('nasa', smartbot.NasaBehaviour(bot))
 bc.add('talk', smartbot.TalkBehaviour(bot))
+bc.add('wolfram', smartbot.WolframBehaviour(bot, os.environ.get('WOLFRAM_APP_ID')))
 bc.load('basic')
 bc.load('loader')
 bc.load('friendly')
@@ -41,6 +43,7 @@ bc.load('joke')
 bc.load('google_image')
 bc.load('nasa')
 bc.load('talk')
+bc.load('wolfram')
 
 info = bot.getInfo()
 print 'Botname: %s' % info.username

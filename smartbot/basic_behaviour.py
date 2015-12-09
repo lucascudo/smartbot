@@ -12,20 +12,15 @@ class BasicBehaviour(Behaviour):
         super(BasicBehaviour, self).__init__(bot)
         self.dispatcher = bot.dispatcher;
 
-    def onLoad(self):
-        self.botInfo = self.bot.getInfo()
-
     def addHandlers(self):
         self.dispatcher.addTelegramCommandHandler('start', self.start)
         self.dispatcher.addTelegramCommandHandler('stop', self.stop)
         self.dispatcher.addTelegramCommandHandler('debug', self.debug)
-        self.dispatcher.addTelegramMessageHandler(self.message)
 
     def removeHandlers(self):
         self.dispatcher.removeTelegramCommandHandler('start', self.start)
         self.dispatcher.removeTelegramCommandHandler('stop', self.stop)
         self.dispatcher.removeTelegramCommandHandler('debug', self.debug)
-        self.dispatcher.removeTelegramMessageHandler(self.message)
 
     def start(self, telegramBot, update):
         self.__activeChats.append(update.message.chat_id)
@@ -50,12 +45,3 @@ class BasicBehaviour(Behaviour):
         else:
             Utils.debugOutput = None
             telegramBot.sendMessage(chat_id=update.message.chat_id, text="debug OFF")
-
-    def message(self, telegramBot, update):
-        pass
-        # bot_rec = re.compile('@' + self.botInfo.username, re.IGNORECASE)
-        # if bot_rec.match(update.message.text):
-        #     if update.message.chat_id in self.__activeChats:
-        #         telegramBot.sendMessage(chat_id=update.message.chat_id, text="iscutei")
-        #     else:
-        #         telegramBot.sendMessage(chat_id=update.message.chat_id, text="tô durminu")

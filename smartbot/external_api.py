@@ -7,6 +7,7 @@ import os
 import tempfile
 import subprocess
 import requests
+from lxml import etree
 
 class ExternalAPI:
     @staticmethod
@@ -16,12 +17,17 @@ class ExternalAPI:
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
         response = requests.get('https://translate.google.com/translate_a/single?client=t&sl=' + fromLanguage + '&tl=' + toLanguage + '&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&otf=1&ssel=6&tsel=3&kc=7&tk=3271.403467&q=' + text, headers=headers)
         try:
-            translatePiece = re.search('\[[^\[\]]+\]', response.text).group()
-            translatePiece = re.sub(',{2,}', ',', translatePiece)
-            resultParsed = eval(translatePiece)
+            piecesRaw = response.text
+            piecesRawFirst = re.split('"en"', piecesRaw)[0]
+            piecesRawFirst = re.sub(',+$', '', piecesRawFirst)
+            piecesRawFirst = re.sub(',{2,}', ',', piecesRawFirst)
+            piecesRawFirst = piecesRawFirst[1:]
+            pieces = eval(piecesRawFirst)
+            result = str(text)
+            for piece in pieces:
+                result = result.replace(piece[1], piece[0])
         except Error as e:
-            resultParsed = [text, 'Não consigo traduzir']
-        result = resultParsed[0]
+            result = 'Não consigo traduzir'
         return result
 
     @staticmethod
@@ -68,5 +74,15 @@ class ExternalAPI:
         if imageTags and len(pTags) >= 3:
             result = { 'imageSource': 'http://apod.nasa.gov/%s' % imageTags[0].attrib['src'], 'explanation': pTags[2].text_content() }
             return result
+        else:
+            return None
+
+    @staticmethod
+    def wolframQuery(query, appId=None):
+        response = requests.get('http://api.wolframalpha.com/v2/query?input=%s&appid=%s' % (query, appId))
+        tree = etree.fromstring(response.content)
+        results = tree.xpath('//pod/subpod/plaintext')
+        if len(results) >= 2 and results[1].text.strip():
+            return results[1].text
         else:
             return None

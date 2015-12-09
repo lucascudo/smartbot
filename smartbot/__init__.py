@@ -13,3 +13,4 @@ from .joke_behaviour import JokeBehaviour
 from .nasa_behaviour import NasaBehaviour
 from .friendly_behaviour import FriendlyBehaviour
 from .talk_behaviour import TalkBehaviour
+from .wolfram_behaviour import WolframBehaviour
