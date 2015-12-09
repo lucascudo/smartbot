@@ -35,7 +35,7 @@ class JokeBehaviour(Behaviour):
         self.logDebug(u'Jalk search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
         jokes = ExternalAPI.searchJoke(query)
         if jokes:
-            jokes = filter(lambda c: len(re.split('\W+', c, re.MULTILINE)) < 70, jokes)
+            jokes = filter(lambda c: len(re.split('\W+', c, re.MULTILINE)) < 200, jokes)
             jokes = sorted(jokes, lambda x, y: len(x) - len(y))
             if jokes:
                 joke = jokes[0]
