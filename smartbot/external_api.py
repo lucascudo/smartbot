@@ -15,21 +15,21 @@ class ExternalAPI:
         if not toLanguage:
             toLanguage = 'pt' if fromLanguage == 'en' else 'en'
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
+        text = re.sub('\s+', ' ', text)
         response = requests.get('https://translate.google.com/translate_a/single?client=t&sl=' + fromLanguage + '&tl=' + toLanguage + '&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&otf=1&ssel=6&tsel=3&kc=7&tk=3271.403467&q=' + text, headers=headers)
         try:
             piecesRaw = response.text
-            import code; code.interact(local=locals())
             piecesRawFirst = re.split('(\[\[|\]\])', piecesRaw)[2]
             piecesRawFirst = re.sub(',{2,}', ',', piecesRawFirst)
             piecesRawFirst = piecesRawFirst + ']'
             piecesRawFirst = re.sub('\[,', '[', piecesRawFirst)
             piecesRawFirst = re.sub(',\]', ']', piecesRawFirst)
-            import code; code.interact(local=locals())
-            pieces = eval(piecesRawFirst)
-            result = str(text)
+            pieces = eval('[%s]' % piecesRawFirst)
+            result = text
+            # import code; code.interact(local=locals())
             for piece in pieces:
-                if piece is list and len(piece) >= 2:
-                    result = result.replace(piece[1], piece[0])
+                if type(piece) is list and len(piece) >= 2:
+                    result = result.replace(piece[1], piece[0], 1)
         except:
             result = None
         return result
@@ -86,7 +86,7 @@ class ExternalAPI:
         response = requests.get('http://api.wolframalpha.com/v2/query?input=%s&appid=%s' % (query, appId))
         tree = etree.fromstring(response.content)
         results = tree.xpath('//pod/subpod/plaintext')
-        if len(results) >= 2 and results[1].text.strip():
+        if len(results) >= 2 and results[1].text and results[1].text.strip():
             return results[1].text
         else:
             return None

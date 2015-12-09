@@ -1,8 +1,10 @@
 # coding: utf-8
 
 from smartbot import Behaviour
+from smartbot import ExternalAPI
 
 import re
+import os
 
 class DynObject(object):
     pass
@@ -29,9 +31,8 @@ class FriendlyBehaviour(Behaviour):
         words = re.compile('\W', re.UNICODE).split(message)
         words = filter(lambda word: not self.mentionMatcher.match(word), words)
         words = map(lambda word: word.lower(), words)
-        keywords = list(set(self.vocabulary.keys()).intersection(words))
-        params = filter(lambda word: word and not word in keywords, words)
-        if keywords:
+        if len(words) > 1 and words[0] in self.vocabulary.keys():
+            params = words[1:]
             self.logDebug(u'Friendly mention (chat_id: %s, keywords: %s, params: %s)' % (update.message.chat_id, ('|').join(keywords), (' ').join(params or ['None'])))
             command = self.vocabulary[keywords[0]]
             updateMock = DynObject()
@@ -39,3 +40,14 @@ class FriendlyBehaviour(Behaviour):
             updateMock.message.chat_id = update.message.chat_id
             updateMock.message.text = '/%s %s' % (command, ' '.join(params))
             self.dispatcher.dispatchTelegramCommand(updateMock)
+        elif len(words) == 1:
+            telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')
+        else:
+            sentence = ' '.join(words)
+            sentenceEnglish = ExternalAPI.translate(sentence.encode('utf-8'), fromLanguage='pt')
+            answerEnglish = ExternalAPI.wolframQuery(sentenceEnglish, appId=os.environ.get('WOLFRAM_APP_ID'))
+            if answerEnglish:
+                answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')
+                telegramBot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
+            else:
+                telegramBot.sendMessage(chat_id=update.message.chat_id, text='Nada a dizer sobre isso')
