@@ -8,6 +8,7 @@ import tempfile
 import subprocess
 import requests
 from lxml import etree
+from lxml import html
 
 class ExternalAPI:
     @staticmethod
@@ -89,6 +90,30 @@ class ExternalAPI:
             results = tree.xpath('//pod/subpod/plaintext')
             if len(results) >= 2 and results[1].text and results[1].text.strip():
                 return results[1].text
+            else:
+                return None
+        except:
+            return None
+
+    @staticmethod
+    def eviQuery(query):
+        query = re.sub('(\?|&)', ' ', query)
+        query = re.sub('\s+', '_', query.strip().lower())
+        headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
+        response = requests.get('https://www.evi.com/q/%s' % query, headers=headers)
+        tree = html.fromstring(response.text)
+        results = []
+        results += tree.xpath('//*[contains(@class, "tk_common")]')
+        results += tree.xpath('//*[contains(@class, "tk_text")]')
+        results = map(lambda tag: tag.text_content(), results)
+        results = filter(lambda text: text.strip(), results)
+        try:
+            if len(results) >= 1 and results[0] and results[0].strip():
+                result = results[0].strip()
+                if result != 'Sorry, I don\'t yet have an answer to that question.':
+                    return result
+                else:
+                    return None
             else:
                 return None
         except:
