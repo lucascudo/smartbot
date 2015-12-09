@@ -29,7 +29,7 @@ class FriendlyBehaviour(Behaviour):
     def mention(self, telegramBot, update):
         message = update.message.text
         words = re.compile('\W', re.UNICODE).split(message)
-        words = filter(lambda word: not self.mentionMatcher.match(word), words)
+        words = filter(lambda word: word.strip() and not self.mentionMatcher.match(word), words)
         words = map(lambda word: word.lower(), words)
         keywords = self.vocabulary.keys()
         if len(words) > 1 and words[0] in keywords:
@@ -52,4 +52,4 @@ class FriendlyBehaviour(Behaviour):
                 answerPortuguese = ExternalAPI.translate(answerEnglish.encode('utf-8'), fromLanguage='en')
                 telegramBot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
-                telegramBot.sendMessage(chat_id=update.message.chat_id, text='Nada a dizer sobre isso')
+                telegramBot.sendMessage(chat_id=update.message.chat_id, text='Prefiro não comentar')

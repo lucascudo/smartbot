@@ -84,9 +84,12 @@ class ExternalAPI:
     @staticmethod
     def wolframQuery(query, appId=None):
         response = requests.get('http://api.wolframalpha.com/v2/query?input=%s&appid=%s' % (query, appId))
-        tree = etree.fromstring(response.content)
-        results = tree.xpath('//pod/subpod/plaintext')
-        if len(results) >= 2 and results[1].text and results[1].text.strip():
-            return results[1].text
-        else:
+        try:
+            tree = etree.fromstring(response.content)
+            results = tree.xpath('//pod/subpod/plaintext')
+            if len(results) >= 2 and results[1].text and results[1].text.strip():
+                return results[1].text
+            else:
+                return None
+        except:
             return None
