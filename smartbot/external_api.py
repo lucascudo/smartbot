@@ -113,8 +113,8 @@ class ExternalAPI:
         response = requests.get('https://www.evi.com/q/%s' % query, headers=headers)
         tree = html.fromstring(response.text)
         results = []
-        results += tree.xpath('//*[contains(@class, "tk_common")]')
         results += tree.xpath('//*[contains(@class, "tk_text")]')
+        results += tree.xpath('//*[contains(@class, "tk_common")]')
         results = map(lambda tag: tag.text_content(), results)
         results = filter(lambda text: text.strip(), results)
         try:
