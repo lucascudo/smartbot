@@ -38,11 +38,22 @@ class ExternalAPI:
     @staticmethod
     def textToSpeech(text, language='pt', encode='mp3'):
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
-        response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + text + '&tl=' + language + '&total=1&idx=0&textlen=4&tk=597433.997738&client=t&prev=input', headers=headers)
         baseName = tempfile.mkstemp()[1]
         mp3Name = baseName + '.mp3'
-        fd = file(mp3Name, 'wb')
-        fd.write(response.content)
+        fd = file(mp3Name, 'ab')
+        words = re.split('\s+', text)
+        words = filter(lambda word: word.strip(), words)
+        if len(words) < 50:
+            response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + text + '&tl=' + language + '&total=1&idx=0&textlen=4&tk=597433.997738&client=t&prev=input', headers=headers)
+            fd.write(response.content)
+        else:
+            for wordPos in range(0, len(words), 40):
+                piece = ' '.join(words[wordPos:wordPos+40])
+                print piece
+                pieceFileName = ExternalAPI.textToSpeech(piece, language, encode)
+                pieceFile = file(pieceFileName, 'rb')
+                fd.write(pieceFile.read())
+                pieceFile.close()
         fd.close()
         if encode == 'mp3':
             return mp3Name
