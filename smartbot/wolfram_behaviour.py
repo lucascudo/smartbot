@@ -19,17 +19,12 @@ class WolframBehaviour(Behaviour):
 
     def wolfram(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
-        queryPortuguese = (p.match(update.message.text).groups()[1] or '').strip()
-        self.logDebug(u'Wolfram query (chat_id: %s, query: %s)' % (update.message.chat_id, queryPortuguese or 'None'))
-        print queryPortuguese
-        queryEnglish = ExternalAPI.translate(queryPortuguese, fromLanguage='pt')
-        print queryEnglish
+        queryEnglish = (p.match(update.message.text).groups()[1] or '').strip()
+        self.logDebug(u'Wolfram query (chat_id: %s, query: %s)' % (update.message.chat_id, queryEnglish or 'None'))
         answerEnglish = ExternalAPI.wolframQuery(queryEnglish, appId=self.wolframAppId)
-        answerEnglish = answerEnglish.replace('\n', '. ')
-        print answerEnglish
+        answerEnglish = (answerEnglish or '').replace('\n', '. ')
         if answerEnglish:
             answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')
-            print answerPortuguese
             if answerPortuguese:
                 telegramBot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:

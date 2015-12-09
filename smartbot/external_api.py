@@ -18,16 +18,20 @@ class ExternalAPI:
         response = requests.get('https://translate.google.com/translate_a/single?client=t&sl=' + fromLanguage + '&tl=' + toLanguage + '&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&otf=1&ssel=6&tsel=3&kc=7&tk=3271.403467&q=' + text, headers=headers)
         try:
             piecesRaw = response.text
-            piecesRawFirst = re.split('"en"', piecesRaw)[0]
-            piecesRawFirst = re.sub(',+$', '', piecesRawFirst)
+            import code; code.interact(local=locals())
+            piecesRawFirst = re.split('(\[\[|\]\])', piecesRaw)[2]
             piecesRawFirst = re.sub(',{2,}', ',', piecesRawFirst)
-            piecesRawFirst = piecesRawFirst[1:]
+            piecesRawFirst = piecesRawFirst + ']'
+            piecesRawFirst = re.sub('\[,', '[', piecesRawFirst)
+            piecesRawFirst = re.sub(',\]', ']', piecesRawFirst)
+            import code; code.interact(local=locals())
             pieces = eval(piecesRawFirst)
             result = str(text)
             for piece in pieces:
-                result = result.replace(piece[1], piece[0])
-        except Error as e:
-            result = 'Não consigo traduzir'
+                if piece is list and len(piece) >= 2:
+                    result = result.replace(piece[1], piece[0])
+        except:
+            result = None
         return result
 
     @staticmethod
