@@ -31,10 +31,11 @@ class FriendlyBehaviour(Behaviour):
         words = re.compile('\W', re.UNICODE).split(message)
         words = filter(lambda word: not self.mentionMatcher.match(word), words)
         words = map(lambda word: word.lower(), words)
-        if len(words) > 1 and words[0] in self.vocabulary.keys():
+        keywords = self.vocabulary.keys()
+        if len(words) > 1 and words[0] in keywords:
+            command = self.vocabulary[words[0]]
             params = words[1:]
-            self.logDebug(u'Friendly mention (chat_id: %s, keywords: %s, params: %s)' % (update.message.chat_id, ('|').join(keywords), (' ').join(params or ['None'])))
-            command = self.vocabulary[keywords[0]]
+            self.logDebug(u'Friendly mention (chat_id: %s, command: %s, params: %s)' % (update.message.chat_id, command, (' ').join(params or ['None'])))
             updateMock = DynObject()
             updateMock.message = DynObject()
             updateMock.message.chat_id = update.message.chat_id
