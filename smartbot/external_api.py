@@ -49,7 +49,6 @@ class ExternalAPI:
         else:
             for wordPos in range(0, len(words), 40):
                 piece = ' '.join(words[wordPos:wordPos+40])
-                print piece
                 pieceFileName = ExternalAPI.textToSpeech(piece, language, encode)
                 pieceFile = file(pieceFileName, 'rb')
                 fd.write(pieceFile.read())
