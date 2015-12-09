@@ -5,9 +5,20 @@ from smartbot import ExternalAPI
 
 import re
 import os
+from multiprocessing import Pool
 
 class DynObject(object):
     pass
+
+def parallelQuery(args):
+    result = {}
+    if args[0] == 0:
+        result['source'] = 'Evi'
+        result['answer'] = ExternalAPI.eviQuery(args[1])
+    elif args[0] == 1:
+        result['source'] = 'Wolfram'
+        result['answer'] = ExternalAPI.wolframQuery(args[1], appId=os.environ.get('WOLFRAM_APP_ID'))
+    return result
 
 class FriendlyBehaviour(Behaviour):
     __active_chats = []
@@ -45,12 +56,19 @@ class FriendlyBehaviour(Behaviour):
             telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')
         else:
             sentence = ' '.join(words)
+            pool = Pool(2)
             sentenceEnglish = ExternalAPI.translate(sentence.encode('utf-8'), fromLanguage='pt')
-            # answerEnglish = ExternalAPI.wolframQuery(sentenceEnglish, appId=os.environ.get('WOLFRAM_APP_ID'))
-            answerEnglish = ExternalAPI.eviQuery(sentenceEnglish)
-            if answerEnglish:
+            results = pool.map(parallelQuery, [(0, sentenceEnglish), (1, sentenceEnglish)])
+            pool.close()
+            results = filter(lambda result: result['answer'] and result['answer'].strip(), results)
+            results = sorted(results, lambda x, y: len(x['answer']) - len(y['answer']))
+            if results:
+                result = results[0]
+                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, answers: %s, choosen: %s)' % (update.message.chat_id, sentence, results, result['source']))
+                answerEnglish = result['answer']
                 answerEnglish = re.sub('(Wolfram\|Alpha|Evi)', self.bot.getInfo().username, answerEnglish)
                 answerPortuguese = ExternalAPI.translate(answerEnglish.encode('utf-8'), fromLanguage='en')
                 telegramBot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
+                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, answers: None)' % (update.message.chat_id, sentence))
                 telegramBot.sendMessage(chat_id=update.message.chat_id, text='Prefiro não comentar')
