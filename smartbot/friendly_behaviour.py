@@ -47,7 +47,8 @@ class FriendlyBehaviour(Behaviour):
             sentenceEnglish = ExternalAPI.translate(sentence.encode('utf-8'), fromLanguage='pt')
             answerEnglish = ExternalAPI.wolframQuery(sentenceEnglish, appId=os.environ.get('WOLFRAM_APP_ID'))
             if answerEnglish:
-                answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')
+                answerEnglish = re.sub('Wolfram\|Alpha', self.bot.getInfo().username, answerEnglish)
+                answerPortuguese = ExternalAPI.translate(answerEnglish.encode('utf-8'), fromLanguage='en')
                 telegramBot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
                 telegramBot.sendMessage(chat_id=update.message.chat_id, text='Nada a dizer sobre isso')
