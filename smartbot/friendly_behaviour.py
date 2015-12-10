@@ -41,7 +41,7 @@ class FriendlyBehaviour(Behaviour):
 
     def mention(self, telegramBot, update):
         message = update.message.text
-        words = re.compile('\W', re.UNICODE).split(message)
+        words = re.compile('\s+', re.UNICODE).split(message)
         words = filter(lambda word: word.strip() and not self.mentionMatcher.match(word), words)
         words = map(lambda word: word.lower(), words)
         keywords = self.vocabulary.keys()
