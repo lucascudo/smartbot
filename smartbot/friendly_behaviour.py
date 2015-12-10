@@ -33,11 +33,11 @@ class FriendlyBehaviour(Behaviour):
         self.botInfo = info
         self.mentionMatcher = re.compile('.*(^|\W)@?(%s|%s)(\W|$).*' % (info.username, info.username.lower().replace('bot', '')), re.IGNORECASE)
         self.dispatcher.addTelegramRegexHandler(self.mentionMatcher, self.mention)
-        self.dispatcher.addTelegramMessageHandler(self.mention)
+        # self.dispatcher.addTelegramMessageHandler(self.mention)
 
     def removeHandlers(self):
         self.dispatcher.removeTelegramRegexHandler(self.mentionMatcher, self.mention)
-        self.dispatcher.removeTelegramMessageHandler(self.mention)
+        # self.dispatcher.removeTelegramMessageHandler(self.mention)
 
     def mention(self, telegramBot, update):
         message = update.message.text
