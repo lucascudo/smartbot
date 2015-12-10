@@ -66,11 +66,11 @@ class FriendlyBehaviour(Behaviour):
             results = sorted(results, lambda x, y: len(x['answer']) - len(y['answer']))
             if results:
                 result = results[0]
-                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, answers: %s, choosen: %s)' % (update.message.chat_id, sentence, results, result['source']))
+                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: %s, choosen: %s)' % (update.message.chat_id, sentence, sentenceEnglish.decode('utf-8'), results, result['source']))
                 answerEnglish = result['answer']
                 answerEnglish = re.sub('(Wolfram\|Alpha|Evi)', self.bot.getInfo().username, answerEnglish)
                 answerPortuguese = ExternalAPI.translate(answerEnglish.encode('utf-8'), fromLanguage='en')
                 telegramBot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
-                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, answers: None)' % (update.message.chat_id, sentence))
+                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: None)' % (update.message.chat_id, sentence, sentenceEnglish.decode('utf-8')))
                 telegramBot.sendMessage(chat_id=update.message.chat_id, text='Prefiro não comentar')
