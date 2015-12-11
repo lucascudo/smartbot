@@ -51,7 +51,7 @@ class FriendlyBehaviour(Behaviour):
             sentence = ' '.join(words)
             bc = self.behaviourControl
             results = []
-            sentenceEnglish = ExternalAPI.translate(sentence.encode('utf-8'), fromLanguage='pt')
+            sentenceEnglish = ExternalAPI.translate(sentence.encode('utf-8'), fromLanguage='pt') or ''
             target = lambda behaviour, sentence: bc.getStatus(behaviour) == 'loaded' and results.append({'source': behaviour, 'answer': bc.get(behaviour).query(sentence)})
             t1 = Thread(target=target, args=('evi', sentenceEnglish))
             t2 = Thread(target=target, args=('wolfram', sentenceEnglish))
