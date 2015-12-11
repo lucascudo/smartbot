@@ -3,8 +3,6 @@
 from smartbot import Behaviour
 from smartbot import ExternalAPI
 
-import re
-
 class GoogleImageBehaviour(Behaviour):
     def __init__(self, bot):
         super(GoogleImageBehaviour, self).__init__(bot)
