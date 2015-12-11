@@ -10,6 +10,10 @@ import os
 import re
 
 class TestExternalAPI(unittest.TestCase):
+    def setUp(self):
+        if not os.environ.get('WOLFRAM_APP_ID'):
+            sys.stderr.write('\nWARNING: The wolfram app id was not provided. Some tests will fail.\n')
+
     def testTranslateShortInvalidWord(self):
         sentence = 'pi'
         result = ExternalAPI.translate(sentence)

@@ -9,8 +9,12 @@ import unittest
 import os
 
 class TestBot(unittest.TestCase):
+    def setUp(self):
+        self.token = os.environ.get('TELEGRAM_BOT_TOKEN')
+        self.assertTrue(self.token, msg='The telegram token was not provided')
+
     def testGetInfo(self):
-        bot = Bot(os.environ['TELEGRAM_BOT_TOKEN'])
+        bot = Bot(self.token)
         info = bot.getInfo()
         self.assertTrue(info.id)
         self.assertTrue(info.username)
