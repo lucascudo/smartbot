@@ -27,7 +27,8 @@ vocabulary = {
     'traduza': 'translateen',
     'nasa': 'nasa',
     'piada': 'joke',
-    'manda': 'image'
+    'manda': 'gimage',
+    'quero': 'bimage'
 }
 
 bc = smartbot.BehaviourControl(bot)
@@ -37,6 +38,7 @@ bc.add('friendly', smartbot.FriendlyBehaviour(bot, bc, vocabulary))
 bc.add('translate', smartbot.TranslateBehaviour(bot))
 bc.add('joke', smartbot.JokeBehaviour(bot))
 bc.add('google_image', smartbot.GoogleImageBehaviour(bot))
+bc.add('bing_image', smartbot.BingImageBehaviour(bot))
 bc.add('nasa', smartbot.NasaBehaviour(bot))
 bc.add('talk', smartbot.TalkBehaviour(bot))
 bc.add('wolfram', smartbot.WolframBehaviour(bot, wolfram_app_id))
@@ -47,6 +49,7 @@ bc.load('friendly')
 bc.load('translate')
 bc.load('joke')
 bc.load('google_image')
+bc.load('bing_image')
 bc.load('nasa')
 bc.load('talk')
 if wolfram_app_id:

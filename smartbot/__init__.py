@@ -8,6 +8,7 @@ from .behaviour import Behaviour
 from .basic_behaviour import BasicBehaviour
 from .loader_behaviour import LoaderBehaviour
 from .google_image_behaviour import GoogleImageBehaviour
+from .bing_image_behaviour import BingImageBehaviour
 from .translate_behaviour import TranslateBehaviour
 from .joke_behaviour import JokeBehaviour
 from .nasa_behaviour import NasaBehaviour

@@ -43,9 +43,13 @@ class TestExternalAPI(unittest.TestCase):
         result = ExternalAPI.searchJoke('amigo')
         self.assertItemsEqual(result, filter(lambda j: re.match('.*amigo.*', j, re.IGNORECASE), result))
 
-    def testSearchImage(self):
-        result = ExternalAPI.searchImage('amigo')
+    def testSearchGoogleImage(self):
+        result = ExternalAPI.searchGoogleImage('amigo')
         self.assertItemsEqual(result, filter(lambda img: re.match('http.*gstatic.*', img), result))
+
+    def testSearchBingImage(self):
+        result = ExternalAPI.searchBingImage('amigo')
+        self.assertItemsEqual(result, filter(lambda img: re.match('http.*bing.net.*', img), result))
 
     def testGetNasaIOD(self):
         result = ExternalAPI.getNasaIOD()
