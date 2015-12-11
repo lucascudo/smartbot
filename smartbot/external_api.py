@@ -83,7 +83,7 @@ class ExternalAPI:
     def searchBingImage(query):
         tree = Utils.crawlUrl('http://www.bing.com/images/search?q=%s' % query)
         imageTags = tree.xpath('//img[contains(@src, "bing.net")]')
-        imageSources = map[lambda img: img.attrib.get('src'), imageTags]
+        imageSources = map(lambda img: img.attrib.get('src'), imageTags)
         return imageSources
 
     @staticmethod

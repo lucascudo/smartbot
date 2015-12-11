@@ -3,6 +3,8 @@
 from smartbot import Behaviour
 from smartbot import ExternalAPI
 
+import re
+
 class BingImageBehaviour(Behaviour):
     def __init__(self, bot):
         super(BingImageBehaviour, self).__init__(bot)
