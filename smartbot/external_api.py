@@ -112,9 +112,7 @@ class ExternalAPI:
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
         response = requests.get('https://www.evi.com/q/%s' % quote(query), headers=headers)
         tree = html.fromstring(response.text)
-        results = []
-        results += tree.xpath('//*[contains(@class, "tk_text")]')
-        results += tree.xpath('//*[contains(@class, "tk_common")]')
+        results = tree.xpath('//*[contains(@class, "tk_text") or contains(@class, "tk_common")]')
         results = map(lambda tag: tag.text_content(), results)
         results = filter(lambda text: text.strip(), results)
         try:
