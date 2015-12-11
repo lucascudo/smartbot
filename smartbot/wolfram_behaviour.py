@@ -17,11 +17,14 @@ class WolframBehaviour(Behaviour):
     def removeHandlers(self):
         self.dispatcher.removeTelegramCommandHandler('wolfram', self.wolfram)
 
+    def query(self, queryEnglish):
+        return ExternalAPI.wolframQuery(queryEnglish, appId=self.wolframAppId)
+
     def wolfram(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
         queryEnglish = (p.match(update.message.text).groups()[1] or '').strip()
         self.logDebug(u'Wolfram query (chat_id: %s, query: %s)' % (update.message.chat_id, queryEnglish or 'None'))
-        answerEnglish = ExternalAPI.wolframQuery(queryEnglish, appId=self.wolframAppId)
+        answerEnglish = self.query(queryEnglish)
         answerEnglish = (answerEnglish or '').replace('\n', '. ')
         if answerEnglish:
             answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')

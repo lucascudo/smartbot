@@ -33,7 +33,7 @@ vocabulary = {
 bc = smartbot.BehaviourControl(bot)
 bc.add('basic', smartbot.BasicBehaviour(bot))
 bc.add('loader', smartbot.LoaderBehaviour(bot, bc))
-bc.add('friendly', smartbot.FriendlyBehaviour(bot, vocabulary))
+bc.add('friendly', smartbot.FriendlyBehaviour(bot, bc, vocabulary))
 bc.add('translate', smartbot.TranslateBehaviour(bot))
 bc.add('joke', smartbot.JokeBehaviour(bot))
 bc.add('google_image', smartbot.GoogleImageBehaviour(bot))

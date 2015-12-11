@@ -16,11 +16,14 @@ class EviBehaviour(Behaviour):
     def removeHandlers(self):
         self.dispatcher.removeTelegramCommandHandler('evi', self.evi)
 
+    def query(self, queryEnglish):
+        return ExternalAPI.eviQuery(queryEnglish)
+
     def evi(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
         queryEnglish = (p.match(update.message.text).groups()[1] or '').strip()
         self.logDebug(u'Evi query (chat_id: %s, query: %s)' % (update.message.chat_id, queryEnglish or 'None'))
-        answerEnglish = ExternalAPI.eviQuery(queryEnglish)
+        answerEnglish = self.query(queryEnglish)
         answerEnglish = (answerEnglish or '').replace('\n', '. ')
         if answerEnglish:
             answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')

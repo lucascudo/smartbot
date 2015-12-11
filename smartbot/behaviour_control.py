@@ -16,6 +16,9 @@ class BehaviourControl(object):
     def hasBehaviour(self, behaviourName):
         return not not self.behaviours.get(behaviourName)
 
+    def get(self, behaviourName):
+        return self.behaviours.get(behaviourName)
+
     def getStatus(self, behaviourName):
         if not self.hasBehaviour(behaviourName):
             return 'unknown'

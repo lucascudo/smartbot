@@ -5,39 +5,30 @@ from smartbot import ExternalAPI
 
 import re
 import os
-from multiprocessing import Pool
+from threading import Thread
 
 class DynObject(object):
     pass
 
-def parallelQuery(args):
-    result = {}
-    if args[0] == 0:
-        result['source'] = 'Evi'
-        result['answer'] = ExternalAPI.eviQuery(args[1])
-    elif args[0] == 1:
-        result['source'] = 'Wolfram'
-        result['answer'] = ExternalAPI.wolframQuery(args[1], appId=os.environ.get('WOLFRAM_APP_ID'))
-    return result
-
 class FriendlyBehaviour(Behaviour):
     __active_chats = []
 
-    def __init__(self, bot, vocabulary={}):
+    def __init__(self, bot, behaviourControl, vocabulary={}):
         super(FriendlyBehaviour, self).__init__(bot)
         self.dispatcher = bot.dispatcher
+        self.behaviourControl = behaviourControl
         self.vocabulary = vocabulary
 
     def addHandlers(self):
         info = self.bot.getInfo()
         self.botInfo = info
         self.mentionMatcher = re.compile('.*(^|\W)@?(%s|%s)(\W|$).*' % (info.username, info.username.lower().replace('bot', '')), re.IGNORECASE)
-        self.dispatcher.addTelegramRegexHandler(self.mentionMatcher, self.mention)
-        # self.dispatcher.addTelegramMessageHandler(self.mention)
+        # self.dispatcher.addTelegramRegexHandler(self.mentionMatcher, self.mention)
+        self.dispatcher.addTelegramMessageHandler(self.mention)
 
     def removeHandlers(self):
-        self.dispatcher.removeTelegramRegexHandler(self.mentionMatcher, self.mention)
-        # self.dispatcher.removeTelegramMessageHandler(self.mention)
+        # self.dispatcher.removeTelegramRegexHandler(self.mentionMatcher, self.mention)
+        self.dispatcher.removeTelegramMessageHandler(self.mention)
 
     def mention(self, telegramBot, update):
         message = update.message.text
@@ -58,10 +49,14 @@ class FriendlyBehaviour(Behaviour):
             telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')
         else:
             sentence = ' '.join(words)
-            pool = Pool(2)
+            bc = self.behaviourControl
+            results = []
             sentenceEnglish = ExternalAPI.translate(sentence.encode('utf-8'), fromLanguage='pt')
-            results = pool.map(parallelQuery, [(0, sentenceEnglish), (1, sentenceEnglish)])
-            pool.close()
+            target = lambda behaviour, sentence: bc.getStatus(behaviour) == 'loaded' and results.append({'source': behaviour, 'answer': bc.get(behaviour).query(sentence)})
+            t1 = Thread(target=target, args=('evi', sentenceEnglish))
+            t2 = Thread(target=target, args=('wolfram', sentenceEnglish))
+            map(lambda t: t.start(), [t1, t2])
+            map(lambda t: t.join(), [t1, t2])
             results = filter(lambda result: result['answer'] and result['answer'].strip(), results)
             results = sorted(results, lambda x, y: len(x['answer']) - len(y['answer']))
             if results:

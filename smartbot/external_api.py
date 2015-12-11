@@ -9,6 +9,7 @@ import subprocess
 import requests
 from lxml import etree
 from lxml import html
+from urllib import quote
 
 class ExternalAPI:
     @staticmethod
@@ -17,7 +18,7 @@ class ExternalAPI:
             toLanguage = 'pt' if fromLanguage == 'en' else 'en'
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
         text = re.sub('\s+', ' ', text)
-        response = requests.get('https://translate.google.com/translate_a/single?client=t&sl=' + fromLanguage + '&tl=' + toLanguage + '&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&otf=1&ssel=6&tsel=3&kc=7&tk=3271.403467&q=' + text, headers=headers)
+        response = requests.get('https://translate.google.com/translate_a/single?client=t&sl=' + fromLanguage + '&tl=' + toLanguage + '&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&otf=1&ssel=6&tsel=3&kc=7&tk=3271.403467&q=' + quote(text), headers=headers)
         try:
             piecesRaw = response.text
             piecesRawFirst = re.split('(\[\[|\]\])', piecesRaw)[2]
@@ -27,7 +28,6 @@ class ExternalAPI:
             piecesRawFirst = re.sub(',\]', ']', piecesRawFirst)
             pieces = eval('[%s]' % piecesRawFirst)
             result = text
-            # import code; code.interact(local=locals())
             for piece in pieces:
                 if type(piece) is list and len(piece) >= 2:
                     result = result.replace(piece[1], piece[0], 1)
@@ -44,7 +44,7 @@ class ExternalAPI:
         words = re.split('\s+', text)
         words = filter(lambda word: word.strip(), words)
         if len(words) < 50:
-            response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + text + '&tl=' + language + '&total=1&idx=0&textlen=4&tk=597433.997738&client=t&prev=input', headers=headers)
+            response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + quote(text) + '&tl=' + language + '&total=1&idx=0&textlen=4&tk=597433.997738&client=t&prev=input', headers=headers)
             fd.write(response.content)
         else:
             for wordPos in range(0, len(words), 40):
@@ -94,7 +94,7 @@ class ExternalAPI:
 
     @staticmethod
     def wolframQuery(query, appId=None):
-        response = requests.get('http://api.wolframalpha.com/v2/query?input=%s&appid=%s' % (query, appId))
+        response = requests.get('http://api.wolframalpha.com/v2/query?input=%s&appid=%s' % (quote(query), appId))
         try:
             tree = etree.fromstring(response.content)
             results = tree.xpath('//pod/subpod/plaintext')
@@ -110,7 +110,7 @@ class ExternalAPI:
         query = re.sub('(\?|&)', ' ', query)
         query = re.sub('\s+', '_', query.strip().lower())
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
-        response = requests.get('https://www.evi.com/q/%s' % query, headers=headers)
+        response = requests.get('https://www.evi.com/q/%s' % quote(query), headers=headers)
         tree = html.fromstring(response.text)
         results = []
         results += tree.xpath('//*[contains(@class, "tk_text")]')
