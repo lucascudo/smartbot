@@ -9,4 +9,3 @@ setup(name='smartbot',
       license='MIT',
       packages=['smartbot'],
       zip_safe=False)
-

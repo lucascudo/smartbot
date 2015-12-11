@@ -2,15 +2,20 @@
 
 import sys
 import os
-import re
 import argparse
 import smartbot
 
 arg_parser = argparse.ArgumentParser(description='Run smartbot')
-arg_parser.add_argument('--token', required=True, dest='token', type=str, help='The telegram bot token')
+arg_parser.add_argument('--wolfram-app-id', required=False, dest='wolfram_app_id', type=str, help='The wolfram app id (or env[WOLFRAM_APP_ID])')
+arg_parser.add_argument('--telegram-bot-token', required=False, dest='telegram_bot_token', type=str, help='The telegram bot token (or env[TELEGRAM_BOT_TOKEN])')
 args = arg_parser.parse_args()
 
-token = args.token
+wolfram_app_id = args.wolfram_app_id or os.environ.get('WOLFRAM_APP_ID')
+token = args.telegram_bot_token or os.environ.get('TELEGRAM_BOT_TOKEN')
+
+if not token:
+    sys.stderr.write('Please set the telegram bot token (see --help for details).\n')
+    exit(0)
 
 bot = smartbot.Bot(token)
 
@@ -34,7 +39,7 @@ bc.add('joke', smartbot.JokeBehaviour(bot))
 bc.add('google_image', smartbot.GoogleImageBehaviour(bot))
 bc.add('nasa', smartbot.NasaBehaviour(bot))
 bc.add('talk', smartbot.TalkBehaviour(bot))
-bc.add('wolfram', smartbot.WolframBehaviour(bot, os.environ.get('WOLFRAM_APP_ID')))
+bc.add('wolfram', smartbot.WolframBehaviour(bot, wolfram_app_id))
 bc.add('evi', smartbot.EviBehaviour(bot))
 bc.load('basic')
 bc.load('loader')
@@ -44,10 +49,14 @@ bc.load('joke')
 bc.load('google_image')
 bc.load('nasa')
 bc.load('talk')
-bc.load('wolfram')
+if wolfram_app_id:
+    bc.load('wolfram')
 bc.load('evi')
 
 info = bot.getInfo()
-print 'Botname: %s' % info.username
+print 'Botname: %s\n' % info.username
+
+if not wolfram_app_id:
+    sys.stderr.write('WARNING: The Wolfram|Alpha app id was not provided. Behaviour disabled\n')
 
 bot.listen()
