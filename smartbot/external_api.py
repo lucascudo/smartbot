@@ -16,8 +16,9 @@ class ExternalAPI:
     def translate(text, fromLanguage='en', toLanguage=None):
         if not toLanguage:
             toLanguage = 'pt' if fromLanguage == 'en' else 'en'
+        text = text.encode('utf-8')
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
-        text = re.sub('\s+', ' ', text)
+        text = re.sub('\s+', ' ', text, re.UNICODE)
         response = requests.get('https://translate.google.com/translate_a/single?client=t&sl=' + fromLanguage + '&tl=' + toLanguage + '&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&otf=1&ssel=6&tsel=3&kc=7&tk=3271.403467&q=' + quote(text), headers=headers)
         try:
             piecesRaw = response.text
@@ -41,7 +42,7 @@ class ExternalAPI:
         baseName = tempfile.mkstemp()[1]
         mp3Name = baseName + '.mp3'
         fd = file(mp3Name, 'ab')
-        words = re.split('\s+', text)
+        words = re.split('\s+', text.encode('utf-8'), re.UNICODE)
         words = filter(lambda word: word.strip(), words)
         if len(words) < 50:
             response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + quote(text) + '&tl=' + language + '&total=1&idx=0&textlen=4&tk=597433.997738&client=t&prev=input', headers=headers)
@@ -66,7 +67,7 @@ class ExternalAPI:
     @staticmethod
     def searchJoke(query=None):
         if query:
-            tree = Utils.crawlUrl('http://www.piadasnet.com/index.php?pesquisaCampo=%s&btpesquisa=OK&pesquisaInicio=0' % query)
+            tree = Utils.crawlUrl('http://www.piadasnet.com/index.php?pesquisaCampo=%s&btpesquisa=OK&pesquisaInicio=0' % quote(query.encode('utf-8')))
         else:
             tree = Utils.crawlUrl('http://www.piadasnet.com/')
         jokeTags = tree.xpath('//p[contains(@class, "piada")]')
@@ -74,14 +75,15 @@ class ExternalAPI:
 
     @staticmethod
     def searchGoogleImage(query):
-        tree = Utils.crawlUrl('https://www.google.com.br/search?site=&tbm=isch&q=%s&oq=%s&tbs=isz:l' % (query, query))
+        query = query.encode('utf-8')
+        tree = Utils.crawlUrl('https://www.google.com.br/search?site=&tbm=isch&q=%s&oq=%s&tbs=isz:l' % (quote(query), quote(query)))
         imageTags = tree.xpath('//img[contains(@src, "gstatic")]')
         imageSources = map(lambda img: img.attrib.get('src'), imageTags)
         return imageSources
 
     @staticmethod
     def searchBingImage(query):
-        tree = Utils.crawlUrl('http://www.bing.com/images/search?q=%s' % query)
+        tree = Utils.crawlUrl('http://www.bing.com/images/search?q=%s' % quote(query.encode('utf-8')))
         imageTags = tree.xpath('//img[contains(@src, "bing.net")]')
         imageSources = map(lambda img: img.attrib.get('src'), imageTags)
         return imageSources
@@ -99,6 +101,7 @@ class ExternalAPI:
 
     @staticmethod
     def wolframQuery(query, appId=None):
+        query = query.encode('utf-8')
         response = requests.get('http://api.wolframalpha.com/v2/query?input=%s&appid=%s' % (quote(query), appId))
         try:
             tree = etree.fromstring(response.content)
@@ -112,6 +115,7 @@ class ExternalAPI:
 
     @staticmethod
     def eviQuery(query):
+        query = query.encode('utf-8')
         query = re.sub('(\?|&)', ' ', query)
         query = re.sub('\s+', '_', query.strip().lower())
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }

@@ -20,7 +20,7 @@ class TestExternalAPI(unittest.TestCase):
         self.assertEqual(result, 'pi')
 
     def testTranslateSimpleSentence(self):
-        sentence = 'O que é carro ?'
+        sentence = u'O que é carro ?'
         result = ExternalAPI.translate(sentence, fromLanguage='pt')
         self.assertEqual(result, 'What car?')
 

@@ -51,7 +51,7 @@ class FriendlyBehaviour(Behaviour):
             sentence = ' '.join(words)
             bc = self.behaviourControl
             results = []
-            sentenceEnglish = ExternalAPI.translate(sentence.encode('utf-8'), fromLanguage='pt') or ''
+            sentenceEnglish = ExternalAPI.translate(sentence, fromLanguage='pt') or ''
             target = lambda behaviour, sentence: bc.getStatus(behaviour) == 'loaded' and results.append({'source': behaviour, 'answer': bc.get(behaviour).query(sentence)})
             t1 = Thread(target=target, args=('evi', sentenceEnglish))
             t2 = Thread(target=target, args=('wolfram', sentenceEnglish))
@@ -64,7 +64,7 @@ class FriendlyBehaviour(Behaviour):
                 self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: %s, choosen: %s)' % (update.message.chat_id, sentence, sentenceEnglish.decode('utf-8'), results, result['source']))
                 answerEnglish = result['answer']
                 answerEnglish = re.sub('(Wolfram\|Alpha|Evi)', self.bot.getInfo().username, answerEnglish)
-                answerPortuguese = ExternalAPI.translate(answerEnglish.encode('utf-8'), fromLanguage='en')
+                answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')
                 telegramBot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
                 self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: None)' % (update.message.chat_id, sentence, sentenceEnglish.decode('utf-8')))

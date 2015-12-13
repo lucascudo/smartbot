@@ -21,5 +21,5 @@ class TalkBehaviour(Behaviour):
         query = (p.match(update.message.text).groups()[1] or '').strip()
         if query:
             self.logDebug(u'Talk (chat_id: %s, query: %s, source_language: pt)' % (update.message.chat_id, query or 'None'))
-            audioFile = ExternalAPI.textToSpeech(query.encode('utf-8'), language='pt', encode='mp3')
+            audioFile = ExternalAPI.textToSpeech(query, language='pt', encode='mp3')
             self.bot.sendAudio(chat_id=update.message.chat_id, audio=audioFile, performer=self.bot.getInfo().username)
