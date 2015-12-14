@@ -42,7 +42,8 @@ class ExternalAPI:
         baseName = tempfile.mkstemp()[1]
         mp3Name = baseName + '.mp3'
         fd = file(mp3Name, 'ab')
-        words = re.split('\s+', text.encode('utf-8'), re.UNICODE)
+	text = text.encode('utf-8')
+        words = re.split('\s+', text, re.UNICODE)
         words = filter(lambda word: word.strip(), words)
         if len(words) < 50:
             response = requests.get('https://translate.google.com/translate_tts?ie=UTF-8&q=' + quote(text) + '&tl=' + language + '&total=1&idx=0&textlen=4&tk=597433.997738&client=t&prev=input', headers=headers)
