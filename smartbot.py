@@ -56,10 +56,9 @@ if wolfram_app_id:
     bc.load('wolfram')
 bc.load('evi')
 
-info = bot.getInfo()
-print 'Botname: %s\n' % info.username
+smartbot.Utils.logInfo(bot, 'MAIN', 'Starting bot')
 
 if not wolfram_app_id:
-    sys.stderr.write('WARNING: The Wolfram|Alpha app id was not provided. Behaviour disabled\n')
+    smartbot.Utils.logWarning(bot, 'MAIN', 'The Wolfram|Alpha APP ID was not provided. Behaviour disabled')
 
 bot.listen()

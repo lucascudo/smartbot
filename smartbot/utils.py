@@ -1,12 +1,37 @@
 # coding: utf-8
 
+import sys
 import time
-from lxml import html
+import logging
 import requests
+from lxml import html
 
 class Utils:
+    logger = None
     debug = False
     debugOutput = None
+
+    @staticmethod
+    def _getLogger():
+        if not Utils.logger:
+            logger = logging.getLogger('smartbot')
+            logger.setLevel(logging.DEBUG)
+            formatter = logging.Formatter('%(asctime)s %(levelname)s (%(botname)s) %(classname)s - %(message)s')
+            streamHandler = logging.StreamHandler(sys.stdout)
+            streamHandler.setLevel(logging.DEBUG)
+            streamHandler.setFormatter(formatter)
+            logger.addHandler(streamHandler)
+            fileHandler = logging.FileHandler('smartbot.log')
+            fileHandler.setLevel(logging.DEBUG)
+            fileHandler.setFormatter(formatter)
+            logger.addHandler(fileHandler)
+            Utils.logger = logger
+        return Utils.logger
+
+    @staticmethod
+    def _getLogArgs(bot, className):
+        botInfo = bot.getInfo()
+        return { 'botname': botInfo.username, 'classname': className }
 
     @staticmethod
     def crawlUrl(url):
@@ -15,7 +40,12 @@ class Utils:
 
     @staticmethod
     def logDebug(bot, className, message):
-        output = u'%s %s: %s' % (time.strftime('%D %T'), className, message)
-        print output.encode('utf-8')
-        if Utils.debug:
-            bot.sendMessage(chat_id=Utils.debugOutput, text=output)
+        Utils._getLogger().debug(message, extra=Utils._getLogArgs(bot, className))
+
+    @staticmethod
+    def logInfo(bot, className, message):
+        Utils._getLogger().info(message, extra=Utils._getLogArgs(bot, className))
+
+    @staticmethod
+    def logWarning(bot, className, message):
+        Utils._getLogger().warning(message, extra=Utils._getLogArgs(bot, className))
