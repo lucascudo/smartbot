@@ -22,6 +22,7 @@ class SlackBot(Bot):
         self._messageHandlers = []
         self._regexHandlers = []
         self._commandHandlers = []
+        self.mentionMatcher = None
         self.info = None
 
     def getInfo(self):
@@ -33,10 +34,15 @@ class SlackBot(Bot):
         return self.info
 
     def addMessageHandler(self, handler):
-        self._messageHandlers.append((handler,))
+        if not self.mentionMatcher:
+            info = self.getInfo()
+            self.mentionMatcher = re.compile('.*(^|\W)@?(%s|%s|%s)(\W|$).*' % (info.id, info.username, info.username.lower().replace('bot', '')), re.IGNORECASE)
+        # self._messageHandlers.append((handler,))
+        self.addRegexHandler(self.mentionMatcher, handler)
 
     def removeMessageHandler(self, handler):
-        self._messageHandlers.remove((handler,))
+        # self._messageHandlers.remove((handler,))
+        self.removeRegexHandler(self.mentionMatcher, handler)
 
     def addRegexHandler(self, matcher, handler):
         self._regexHandlers.append((matcher, handler))

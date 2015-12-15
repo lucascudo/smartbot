@@ -21,7 +21,7 @@ class FriendlyBehaviour(Behaviour):
     def addHandlers(self):
         info = self.bot.getInfo()
         self.botInfo = info
-        self.mentionMatcher = re.compile('.*(^|\W)@?(%s|%s)(\W|$).*' % (info.username, info.username.lower().replace('bot', '')), re.IGNORECASE)
+        self.mentionMatcher = re.compile('.*(^|\W)@?(%s|%s|%s)(\W|$).*' % (info.id, info.username, info.username.lower().replace('bot', '')), re.IGNORECASE)
         self.bot.addMessageHandler(self.mention)
 
     def removeHandlers(self):
