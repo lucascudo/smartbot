@@ -8,7 +8,6 @@ import re
 class GoogleImageBehaviour(Behaviour):
     def __init__(self, bot):
         super(GoogleImageBehaviour, self).__init__(bot)
-        self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
         self.bot.addCommandHandler('gimage', self.imageSearch)

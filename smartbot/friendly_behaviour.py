@@ -15,7 +15,6 @@ class FriendlyBehaviour(Behaviour):
 
     def __init__(self, bot, behaviourControl, vocabulary={}):
         super(FriendlyBehaviour, self).__init__(bot)
-        self.dispatcher = bot.dispatcher
         self.behaviourControl = behaviourControl
         self.vocabulary = vocabulary
 
@@ -42,7 +41,7 @@ class FriendlyBehaviour(Behaviour):
             updateMock.message = DynObject()
             updateMock.message.chat_id = update.message.chat_id
             updateMock.message.text = '/%s %s' % (command, ' '.join(params))
-            self.dispatcher.dispatchTelegramCommand(updateMock)
+            self.bot.dispatchCommand(updateMock, command)
         elif len(words) == 1:
             self.bot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')
         else:
@@ -59,11 +58,11 @@ class FriendlyBehaviour(Behaviour):
             results = sorted(results, lambda x, y: len(x['answer']) - len(y['answer']))
             if results:
                 result = results[0]
-                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: %s, choosen: %s)' % (update.message.chat_id, sentence, sentenceEnglish.decode('utf-8'), results, result['source']))
+                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: %s, choosen: %s)' % (update.message.chat_id, sentence, sentenceEnglish, results, result['source']))
                 answerEnglish = result['answer']
                 answerEnglish = re.sub('(Wolfram\|Alpha|Evi)', self.bot.getInfo().username, answerEnglish)
                 answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')
                 self.bot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
-                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: None)' % (update.message.chat_id, sentence, sentenceEnglish.decode('utf-8')))
-                self.bot.sendMessage(chat_id=update.message.chat_id, text='Prefiro não comentar')
+                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: None)' % (update.message.chat_id, sentence, sentenceEnglish))
+                self.bot.sendMessage(chat_id=update.message.chat_id, text=u'Prefiro não comentar')

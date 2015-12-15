@@ -8,7 +8,6 @@ import re
 class TalkBehaviour(Behaviour):
     def __init__(self, bot):
         super(TalkBehaviour, self).__init__(bot)
-        self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
         self.bot.addCommandHandler('talk', self.talk)

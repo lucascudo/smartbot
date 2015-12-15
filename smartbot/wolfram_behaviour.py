@@ -8,14 +8,13 @@ import re
 class WolframBehaviour(Behaviour):
     def __init__(self, bot, wolframAppId):
         super(WolframBehaviour, self).__init__(bot)
-        self.dispatcher = bot.dispatcher;
         self.wolframAppId = wolframAppId
 
     def addHandlers(self):
-        self.dispatcher.addTelegramCommandHandler('wolfram', self.wolfram)
+        self.bot.addCommandHandler('wolfram', self.wolfram)
 
     def removeHandlers(self):
-        self.dispatcher.removeTelegramCommandHandler('wolfram', self.wolfram)
+        self.bot.removeCommandHandler('wolfram', self.wolfram)
 
     def query(self, queryEnglish):
         return ExternalAPI.wolframQuery(queryEnglish, appId=self.wolframAppId)
@@ -31,4 +30,4 @@ class WolframBehaviour(Behaviour):
             if answerPortuguese:
                 self.bot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
-                self.bot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')
+                self.bot.sendMessage(chat_id=update.message.chat_id, text=u'Não entendi')

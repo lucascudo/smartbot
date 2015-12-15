@@ -49,3 +49,7 @@ class Utils:
     @staticmethod
     def logWarning(bot, className, message):
         Utils._getLogger().warning(message, extra=Utils._getLogArgs(bot, className))
+
+    @staticmethod
+    def logError(bot, className, message):
+        Utils._getLogger().error(message, extra=Utils._getLogArgs(bot, className))

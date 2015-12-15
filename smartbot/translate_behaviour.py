@@ -8,15 +8,14 @@ import re
 class TranslateBehaviour(Behaviour):
     def __init__(self, bot):
         super(TranslateBehaviour, self).__init__(bot)
-        self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
-        self.dispatcher.addTelegramCommandHandler('translateen', self.translateen)
-        self.dispatcher.addTelegramCommandHandler('translatept', self.translatept)
+        self.bot.addCommandHandler('translateen', self.translateen)
+        self.bot.addCommandHandler('translatept', self.translatept)
 
     def removeHandlers(self):
-        self.dispatcher.removeTelegramCommandHandler('translateen', self.translateen)
-        self.dispatcher.removeTelegramCommandHandler('translatept', self.translatept)
+        self.bot.removeCommandHandler('translateen', self.translateen)
+        self.bot.removeCommandHandler('translatept', self.translatept)
 
     def translateen(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')

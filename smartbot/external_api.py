@@ -32,6 +32,7 @@ class ExternalAPI:
             for piece in pieces:
                 if type(piece) is list and len(piece) >= 2:
                     result = result.replace(piece[1], piece[0], 1)
+            result = result.decode('utf-8')
         except:
             result = None
         return result
@@ -108,7 +109,7 @@ class ExternalAPI:
             tree = etree.fromstring(response.content)
             results = tree.xpath('//pod[contains(@scanner, "Data") or contains(@title, "Result")]/subpod/plaintext')
             if len(results) >= 0 and results[0].text and results[0].text.strip():
-                return results[0].text
+                return results[0].text.decode('utf-8')
             else:
                 return None
         except:
@@ -129,7 +130,7 @@ class ExternalAPI:
             if len(results) >= 1 and results[0] and results[0].strip():
                 result = results[0].strip()
                 if result != 'Sorry, I don\'t yet have an answer to that question.':
-                    return result
+                    return result.decode('utf-8')
                 else:
                     return None
             else:

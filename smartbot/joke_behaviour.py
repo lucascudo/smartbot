@@ -11,7 +11,6 @@ import random
 class JokeBehaviour(Behaviour):
     def __init__(self, bot):
         super(JokeBehaviour, self).__init__(bot)
-        self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
         self.bot.addCommandHandler('joke', self.jokeSearch)

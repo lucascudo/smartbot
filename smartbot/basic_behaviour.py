@@ -10,7 +10,6 @@ class BasicBehaviour(Behaviour):
 
     def __init__(self, bot):
         super(BasicBehaviour, self).__init__(bot)
-        self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
         self.bot.addCommandHandler('start', self.start)

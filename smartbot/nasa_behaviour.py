@@ -9,7 +9,6 @@ import random
 class NasaBehaviour(Behaviour):
     def __init__(self, bot):
         super(NasaBehaviour, self).__init__(bot)
-        self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
         self.bot.addCommandHandler('nasa', self.nasaSearch)

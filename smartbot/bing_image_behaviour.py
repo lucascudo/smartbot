@@ -8,7 +8,6 @@ import re
 class BingImageBehaviour(Behaviour):
     def __init__(self, bot):
         super(BingImageBehaviour, self).__init__(bot)
-        self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
         self.bot.addCommandHandler('bimage', self.imageSearch)

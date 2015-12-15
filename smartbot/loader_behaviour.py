@@ -7,7 +7,6 @@ import re
 class LoaderBehaviour(Behaviour):
     def __init__(self, bot, behaviourControl):
         super(LoaderBehaviour, self).__init__(bot)
-        self.dispatcher = bot.dispatcher;
         self.behaviourControl = behaviourControl
 
     def addHandlers(self):

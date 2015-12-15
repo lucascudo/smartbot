@@ -6,18 +6,27 @@ import argparse
 import smartbot
 
 arg_parser = argparse.ArgumentParser(description='Run smartbot')
-arg_parser.add_argument('--wolfram-app-id', required=False, dest='wolfram_app_id', type=str, help='The wolfram app id (or env[WOLFRAM_APP_ID])')
 arg_parser.add_argument('--telegram-bot-token', required=False, dest='telegram_bot_token', type=str, help='The telegram bot token (or env[TELEGRAM_BOT_TOKEN])')
+arg_parser.add_argument('--slack-bot-token', required=False, dest='slack_bot_token', type=str, help='The slack bot token (or env[SLACK_BOT_TOKEN])')
+arg_parser.add_argument('--wolfram-app-id', required=False, dest='wolfram_app_id', type=str, help='The wolfram app id (or env[WOLFRAM_APP_ID])')
 args = arg_parser.parse_args()
 
+telegram_token = args.telegram_bot_token or os.environ.get('TELEGRAM_BOT_TOKEN')
+slack_token = args.slack_bot_token or os.environ.get('SLACK_BOT_TOKEN')
 wolfram_app_id = args.wolfram_app_id or os.environ.get('WOLFRAM_APP_ID')
-token = args.telegram_bot_token or os.environ.get('TELEGRAM_BOT_TOKEN')
 
-if not token:
-    sys.stderr.write('Please set the telegram bot token (see --help for details).\n')
+if not telegram_token and not slack_token:
+    sys.stderr.write('Please set the telegram/slack bot token (see --help for details).\n')
     exit(0)
 
-bot = smartbot.Bot(token)
+if telegram_token and slack_token:
+    sys.stderr.write('There are telegram and slack set. It should be only one (see --help for details).\n')
+    exit(0)
+
+if telegram_token:
+    bot = smartbot.TelegramBot(telegram_token)
+elif slack_token:
+    bot = smartbot.SlackBot(slack_token)
 
 vocabulary = {
     'standup': 'jalk',

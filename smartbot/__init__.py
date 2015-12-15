@@ -2,6 +2,8 @@ from .utils import Utils
 from .external_api import ExternalAPI
 
 from .bot import Bot
+from .telegram_bot import TelegramBot
+from .slack_bot import SlackBot
 
 from .behaviour_control import BehaviourControl
 from .behaviour import Behaviour
