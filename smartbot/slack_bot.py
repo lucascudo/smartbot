@@ -127,7 +127,7 @@ class SlackBot(Bot):
             info = self.getInfo()
             channelInfo = self._getChannelInfo(update.message.chat_id)
             maxMembers = 4
-            if update.message.user == 'U02LQ47L4' or len(channelInfo['members']) >= maxMembers:
+            if update.message.user == 'U02LQ47L4' or (channelInfo and len(channelInfo['members'])) >= maxMembers:
                 if not self.dispatchCommand(update):
                     self.dispatchMessage(update)
                     self.dispatchRegex(update)
