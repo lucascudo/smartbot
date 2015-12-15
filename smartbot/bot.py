@@ -34,7 +34,7 @@ class Bot(object):
     def dispatchMessage(self, update):
         raise NotImplementedError
 
-    def dispatchRegex(self, update)
+    def dispatchRegex(self, update):
         raise NotImplementedError
 
     def dispatchCommand(self, update, command):

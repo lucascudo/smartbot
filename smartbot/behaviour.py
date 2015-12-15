@@ -11,10 +11,13 @@ class Behaviour(object):
 
     def load(self):
         if not self.loaded:
-            self.addHandlers()
-            self.loaded = True
-            self.logDebug('Behaviour loaded')
-            self.onLoad()
+            try:
+                self.addHandlers()
+                self.loaded = True
+                self.logDebug('Behaviour loaded')
+                self.onLoad()
+            except Warning as warn:
+                self.logWarning(warn.message)
 
     def unload(self):
         if self.loaded:
@@ -25,6 +28,9 @@ class Behaviour(object):
 
     def logDebug(self, message):
         Utils.logDebug(self.bot, self.__class__.__name__, message)
+
+    def logWarning(self, message):
+        Utils.logWarning(self.bot, self.__class__.__name__, message)
 
     def onLoad(self):
         None

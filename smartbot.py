@@ -16,11 +16,11 @@ slack_token = args.slack_bot_token or os.environ.get('SLACK_BOT_TOKEN')
 wolfram_app_id = args.wolfram_app_id or os.environ.get('WOLFRAM_APP_ID')
 
 if not telegram_token and not slack_token:
-    sys.stderr.write('Please set the telegram/slack bot token (see --help for details).\n')
+    sys.stderr.write('Please set the telegram/slack token (see --help for details).\n')
     exit(0)
 
 if telegram_token and slack_token:
-    sys.stderr.write('There are telegram and slack set. It should be only one (see --help for details).\n')
+    sys.stderr.write('There are already telegram and slack token set. Please choose only one (see --help for details).\n')
     exit(0)
 
 if telegram_token:
@@ -61,13 +61,9 @@ bc.load('google_image')
 bc.load('bing_image')
 bc.load('nasa')
 bc.load('talk')
-if wolfram_app_id:
-    bc.load('wolfram')
+bc.load('wolfram')
 bc.load('evi')
 
 smartbot.Utils.logInfo(bot, 'MAIN', 'Starting bot')
-
-if not wolfram_app_id:
-    smartbot.Utils.logWarning(bot, 'MAIN', 'The Wolfram|Alpha APP ID was not provided. Behaviour disabled')
 
 bot.listen()

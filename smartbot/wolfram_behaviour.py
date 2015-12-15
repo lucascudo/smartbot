@@ -11,7 +11,10 @@ class WolframBehaviour(Behaviour):
         self.wolframAppId = wolframAppId
 
     def addHandlers(self):
-        self.bot.addCommandHandler('wolfram', self.wolfram)
+        if not self.wolframAppId:
+            raise RuntimeWarning, 'The Wolfram|Alpha APP ID was not provided. Behaviour disabled'
+        else:
+            self.bot.addCommandHandler('wolfram', self.wolfram)
 
     def removeHandlers(self):
         self.bot.removeCommandHandler('wolfram', self.wolfram)
