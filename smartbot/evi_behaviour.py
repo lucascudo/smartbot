@@ -11,10 +11,10 @@ class EviBehaviour(Behaviour):
         self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
-        self.dispatcher.addTelegramCommandHandler('evi', self.evi)
+        self.bot.addCommandHandler('evi', self.evi)
 
     def removeHandlers(self):
-        self.dispatcher.removeTelegramCommandHandler('evi', self.evi)
+        self.bot.removeCommandHandler('evi', self.evi)
 
     def query(self, queryEnglish):
         return ExternalAPI.eviQuery(queryEnglish)
@@ -28,6 +28,6 @@ class EviBehaviour(Behaviour):
         if answerEnglish:
             answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')
             if answerPortuguese:
-                telegramBot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
+                self.bot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
-                telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')
+                self.bot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')

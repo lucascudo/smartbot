@@ -13,22 +13,22 @@ class BasicBehaviour(Behaviour):
         self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
-        self.dispatcher.addTelegramCommandHandler('start', self.start)
-        self.dispatcher.addTelegramCommandHandler('stop', self.stop)
-        self.dispatcher.addTelegramCommandHandler('debug', self.debug)
+        self.bot.addCommandHandler('start', self.start)
+        self.bot.addCommandHandler('stop', self.stop)
+        self.bot.addCommandHandler('debug', self.debug)
 
     def removeHandlers(self):
-        self.dispatcher.removeTelegramCommandHandler('start', self.start)
-        self.dispatcher.removeTelegramCommandHandler('stop', self.stop)
-        self.dispatcher.removeTelegramCommandHandler('debug', self.debug)
+        self.bot.removeCommandHandler('start', self.start)
+        self.bot.removeCommandHandler('stop', self.stop)
+        self.bot.removeCommandHandler('debug', self.debug)
 
     def start(self, telegramBot, update):
         self.__activeChats.append(update.message.chat_id)
-        telegramBot.sendMessage(chat_id=update.message.chat_id, text="tâmu juntu")
+        self.bot.sendMessage(chat_id=update.message.chat_id, text="tâmu juntu")
 
     def stop(self, telegramBot, update):
         self.__activeChats.remove(update.message.chat_id)
-        telegramBot.sendMessage(chat_id=update.message.chat_id, text="gudibai !")
+        self.bot.sendMessage(chat_id=update.message.chat_id, text="gudibai !")
 
     def debug(self, telegramBot, update):
         matcher = re.compile('([^ ]*) ?(here|\d+)? ?(on|off)?', re.IGNORECASE)
@@ -41,7 +41,7 @@ class BasicBehaviour(Behaviour):
             Utils.debug = not Utils.debug
         if Utils.debug:
             Utils.debugOutput = update.message.chat_id if (groups[1] or 'here') == 'here' else groups[1]
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text="debug ON in %s" % Utils.debugOutput)
+            self.bot.sendMessage(chat_id=update.message.chat_id, text="debug ON in %s" % Utils.debugOutput)
         else:
             Utils.debugOutput = None
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text="debug OFF")
+            self.bot.sendMessage(chat_id=update.message.chat_id, text="debug OFF")

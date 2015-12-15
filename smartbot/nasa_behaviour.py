@@ -12,16 +12,16 @@ class NasaBehaviour(Behaviour):
         self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
-        self.dispatcher.addTelegramCommandHandler('nasa', self.nasaSearch)
+        self.bot.addCommandHandler('nasa', self.nasaSearch)
 
     def removeHandlers(self):
-        self.dispatcher.removeTelegramCommandHandler('nasa', self.nasaSearch)
+        self.bot.removeCommandHandler('nasa', self.nasaSearch)
 
     def nasaSearch(self, telegramBot, update):
         self.logDebug(u'Nasa search (chat_id: %s)' % update.message.chat_id)
         nasaData = ExternalAPI.getNasaIOD()
         if nasaData:
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text=nasaData['imageSource'])
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text=nasaData['explanation'])
+            self.bot.sendMessage(chat_id=update.message.chat_id, text=nasaData['imageSource'])
+            self.bot.sendMessage(chat_id=update.message.chat_id, text=nasaData['explanation'])
         else:
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei imagem da nasa')
+            self.bot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei imagem da nasa')

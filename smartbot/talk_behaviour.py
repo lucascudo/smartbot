@@ -11,10 +11,10 @@ class TalkBehaviour(Behaviour):
         self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
-        self.dispatcher.addTelegramCommandHandler('talk', self.talk)
+        self.bot.addCommandHandler('talk', self.talk)
 
     def removeHandlers(self):
-        self.dispatcher.removeTelegramCommandHandler('talk', self.talk)
+        self.bot.removeCommandHandler('talk', self.talk)
 
     def talk(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')

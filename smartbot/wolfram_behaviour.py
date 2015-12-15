@@ -29,6 +29,6 @@ class WolframBehaviour(Behaviour):
         if answerEnglish:
             answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')
             if answerPortuguese:
-                telegramBot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
+                self.bot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
-                telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')
+                self.bot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')

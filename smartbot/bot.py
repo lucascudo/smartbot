@@ -1,6 +1,5 @@
 # coding: utf-8
 
-import sys
 import io
 import requests
 import telegram
@@ -17,6 +16,18 @@ class Bot:
     def getInfo(self):
         self.info = self.info or self.telegramBot.getMe()
         return self.info
+
+    def addMessageHandler(self, handler):
+        self.dispatcher.addTelegramMessageHandler(handler)
+
+    def removeMessageHandler(self, handler):
+        self.dispatcher.removeTelegramMessageHandler(handler)
+
+    def addCommandHandler(self, command, handler):
+        self.dispatcher.addTelegramCommandHandler(command, handler)
+
+    def removeCommandHandler(self, command, handler):
+        self.dispatcher.removeTelegramCommandHandler(command, handler)
 
     def sendMessage(self, **params):
         return self.telegramBot.sendMessage(**params)

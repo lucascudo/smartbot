@@ -23,12 +23,10 @@ class FriendlyBehaviour(Behaviour):
         info = self.bot.getInfo()
         self.botInfo = info
         self.mentionMatcher = re.compile('.*(^|\W)@?(%s|%s)(\W|$).*' % (info.username, info.username.lower().replace('bot', '')), re.IGNORECASE)
-        # self.dispatcher.addTelegramRegexHandler(self.mentionMatcher, self.mention)
-        self.dispatcher.addTelegramMessageHandler(self.mention)
+        self.bot.addMessageHandler(self.mention)
 
     def removeHandlers(self):
-        # self.dispatcher.removeTelegramRegexHandler(self.mentionMatcher, self.mention)
-        self.dispatcher.removeTelegramMessageHandler(self.mention)
+        self.bot.removeMessageHandler(self.mention)
 
     def mention(self, telegramBot, update):
         message = update.message.text
@@ -46,7 +44,7 @@ class FriendlyBehaviour(Behaviour):
             updateMock.message.text = '/%s %s' % (command, ' '.join(params))
             self.dispatcher.dispatchTelegramCommand(updateMock)
         elif len(words) == 1:
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')
+            self.bot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')
         else:
             sentence = ' '.join(words)
             bc = self.behaviourControl
@@ -65,7 +63,7 @@ class FriendlyBehaviour(Behaviour):
                 answerEnglish = result['answer']
                 answerEnglish = re.sub('(Wolfram\|Alpha|Evi)', self.bot.getInfo().username, answerEnglish)
                 answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')
-                telegramBot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
+                self.bot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
                 self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: None)' % (update.message.chat_id, sentence, sentenceEnglish.decode('utf-8')))
-                telegramBot.sendMessage(chat_id=update.message.chat_id, text='Prefiro não comentar')
+                self.bot.sendMessage(chat_id=update.message.chat_id, text='Prefiro não comentar')

@@ -14,12 +14,12 @@ class JokeBehaviour(Behaviour):
         self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
-        self.dispatcher.addTelegramCommandHandler('joke', self.jokeSearch)
-        self.dispatcher.addTelegramCommandHandler('jalk', self.jalkSearch)
+        self.bot.addCommandHandler('joke', self.jokeSearch)
+        self.bot.addCommandHandler('jalk', self.jalkSearch)
 
     def removeHandlers(self):
-        self.dispatcher.removeTelegramCommandHandler('joke', self.jokeSearch)
-        self.dispatcher.removeTelegramCommandHandler('jalk', self.jalkSearch)
+        self.bot.removeCommandHandler('joke', self.jokeSearch)
+        self.bot.removeCommandHandler('jalk', self.jalkSearch)
 
     def jokeSearch(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
@@ -27,7 +27,7 @@ class JokeBehaviour(Behaviour):
         self.logDebug(u'Joke search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
         jokes = ExternalAPI.searchJoke(query)
         if jokes:
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text=random.choice(jokes))
+            self.bot.sendMessage(chat_id=update.message.chat_id, text=random.choice(jokes))
 
     def jalkSearch(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
@@ -43,6 +43,6 @@ class JokeBehaviour(Behaviour):
                 if os.path.exists(audioFile) and os.path.getsize(audioFile) > 0:
                     self.bot.sendAudio(chat_id=update.message.chat_id, audio=audioFile, performer=self.bot.getInfo().username)
                 else:
-                    telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não consigo contar')
+                    self.bot.sendMessage(chat_id=update.message.chat_id, text='Não consigo contar')
             else:
-                telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei piada curta')
+                self.bot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei piada curta')

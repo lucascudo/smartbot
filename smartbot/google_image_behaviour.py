@@ -11,10 +11,10 @@ class GoogleImageBehaviour(Behaviour):
         self.dispatcher = bot.dispatcher;
 
     def addHandlers(self):
-        self.dispatcher.addTelegramCommandHandler('gimage', self.imageSearch)
+        self.bot.addCommandHandler('gimage', self.imageSearch)
 
     def removeHandlers(self):
-        self.dispatcher.removeTelegramCommandHandler('gimage', self.imageSearch)
+        self.bot.removeCommandHandler('gimage', self.imageSearch)
 
     def imageSearch(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
@@ -22,6 +22,6 @@ class GoogleImageBehaviour(Behaviour):
         self.logDebug(u'Google image search (chat_id: %s, query: %s)' % (update.message.chat_id, query or 'None'))
         imageSources = ExternalAPI.searchGoogleImage(query)
         if imageSources:
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text=imageSources[0])
+            self.bot.sendMessage(chat_id=update.message.chat_id, text=imageSources[0])
         else:
-            telegramBot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei imagem relacionada')
+            self.bot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei imagem relacionada')

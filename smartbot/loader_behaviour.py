@@ -11,12 +11,12 @@ class LoaderBehaviour(Behaviour):
         self.behaviourControl = behaviourControl
 
     def addHandlers(self):
-        self.dispatcher.addTelegramCommandHandler('load', self.loadBehaviour)
-        self.dispatcher.addTelegramCommandHandler('unload', self.unloadBehaviour)
+        self.bot.addCommandHandler('load', self.loadBehaviour)
+        self.bot.addCommandHandler('unload', self.unloadBehaviour)
 
     def removeHandlers(self):
-        self.dispatcher.removeTelegramCommandHandler('load', self.loadBehaviour)
-        self.dispatcher.removeTelegramCommandHandler('unload', self.unloadBehaviour)
+        self.bot.removeCommandHandler('load', self.loadBehaviour)
+        self.bot.removeCommandHandler('unload', self.unloadBehaviour)
 
     def loadBehaviour(self, telegramBot, update):
         p = re.compile('([^ ]*) (.*)')
