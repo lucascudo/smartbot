@@ -29,4 +29,4 @@ class EviBehaviour(Behaviour):
             if answerPortuguese:
                 self.bot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
-                self.bot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')
+                self.bot.sendMessage(chat_id=update.message.chat_id, text=u'Não entendi')

@@ -43,7 +43,7 @@ class FriendlyBehaviour(Behaviour):
             updateMock.message.text = '/%s %s' % (command, ' '.join(params))
             self.bot.dispatchCommand(updateMock, command)
         elif len(words) == 1:
-            self.bot.sendMessage(chat_id=update.message.chat_id, text='Não entendi')
+            self.bot.sendMessage(chat_id=update.message.chat_id, text=u'Não entendi')
         else:
             sentence = ' '.join(words)
             bc = self.behaviourControl
