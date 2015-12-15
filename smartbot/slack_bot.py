@@ -5,6 +5,7 @@ import re
 import sys
 import time
 import json
+import datetime
 import requests
 import slackclient
 from smartbot import Bot
@@ -14,35 +15,41 @@ class DynObject(object):
     pass
 
 class SlackBot(Bot):
+    def _getChannelInfo(self, channel):
+        if not self._channelInfoCache.get(channel) or (datetime.datetime.now() - datetime.datetime.fromtimestamp(float(self._channelInfoCache[channel]['last_read']))).total_seconds > 300:
+            self._channelInfoCache[channel] = json.loads(self.slackClient.api_call('channels.info', channel=channel)).get('channel')
+        return self._channelInfoCache.get(channel)
+
     def __init__(self, token):
         super(SlackBot, self).__init__(token)
         self.baseUrl = 'https://slack.com/api'
         self.slackClient = slackclient.SlackClient(token)
         self._commandMatcher = re.compile('^_(\w+)( .*)?$')
+        self._channelInfoCache = {}
         self._messageHandlers = []
         self._regexHandlers = []
         self._commandHandlers = []
-        self.mentionMatcher = None
-        self.info = None
+        self._mentionMacher = None
+        self._info = None
 
     def getInfo(self):
-        if not self.info:
+        if not self._info:
             slackInfo = json.loads(self.slackClient.api_call('auth.test'))
-            self.info = DynObject()
-            self.info.id = slackInfo.get('user_id')
-            self.info.username = self.info.first_name = slackInfo.get('user')
-        return self.info
+            self._info = DynObject()
+            self._info.id = slackInfo.get('user_id')
+            self._info.username = self._info.first_name = slackInfo.get('user')
+        return self._info
 
     def addMessageHandler(self, handler):
-        if not self.mentionMatcher:
+        if not self._mentionMacher:
             info = self.getInfo()
-            self.mentionMatcher = re.compile('.*(^|\W)@?(%s|%s|%s)(\W|$).*' % (info.id, info.username, info.username.lower().replace('bot', '')), re.IGNORECASE)
+            self._mentionMacher = re.compile('.*(^|\W)@?(%s|%s)(\W|$).*' % (info.id, info.username), re.IGNORECASE)
         # self._messageHandlers.append((handler,))
-        self.addRegexHandler(self.mentionMatcher, handler)
+        self.addRegexHandler(self._mentionMacher, handler)
 
     def removeMessageHandler(self, handler):
         # self._messageHandlers.remove((handler,))
-        self.removeRegexHandler(self.mentionMatcher, handler)
+        self.removeRegexHandler(self._mentionMacher, handler)
 
     def addRegexHandler(self, matcher, handler):
         self._regexHandlers.append((matcher, handler))
@@ -106,7 +113,7 @@ class SlackBot(Bot):
     def dispatchCommand(self, update, command=None):
         dispatched = False
         commandMatches = self._commandMatcher.match(update.message.text)
-        if command or commandMatches:
+        if update.message.user == 'U02LQ47L4' and command or commandMatches:
             for commandHandler in self._commandHandlers:
                 commandCurrent = commandHandler[0]
                 handler = commandHandler[1]
@@ -117,15 +124,22 @@ class SlackBot(Bot):
 
     def processUpdate(self, update):
         if update.type == 'message':
-            if not self.dispatchCommand(update):
-                self.dispatchMessage(update)
-                self.dispatchRegex(update)
+            info = self.getInfo()
+            channelInfo = self._getChannelInfo(update.message.chat_id)
+            maxMembers = 4
+            if update.message.user == 'U02LQ47L4' or len(channelInfo['members']) >= maxMembers:
+                if not self.dispatchCommand(update):
+                    self.dispatchMessage(update)
+                    self.dispatchRegex(update)
+            else:
+                self.sendMessage(chat_id=update.message.chat_id, text=u'Sinto muito. Só estou autorizado a interagir nos canais com pelo menos %s membros.' % maxMembers)
 
     def convertToUpdate(self, slackEvent):
         update = DynObject()
-        if slackEvent.get(u'type') == 'message' and not slackEvent.get(u'subtype') == 'bot_message' and not slackEvent.get(u'user') == self.getInfo().id:
+        if slackEvent.get(u'text') and slackEvent.get(u'type') == 'message' and not slackEvent.get(u'subtype') == 'bot_message' and not slackEvent.get(u'user') == self.getInfo().id:
             update.type = 'message'
             update.message = DynObject()
+            update.message.user = slackEvent.get(u'user')
             update.message.text = slackEvent.get(u'text') or ''
             update.message.chat_id = slackEvent.get(u'channel')
         else:
@@ -133,12 +147,12 @@ class SlackBot(Bot):
         return update
 
     def listen(self):
-        try:
-            if self.slackClient.rtm_connect():
-                while True:
-                    events = self.slackClient.rtm_read()
-                    for event in events:
-                        self.processUpdate(self.convertToUpdate(event))
-                    time.sleep(0.5)
-        except:
-            Utils.logError(self, self.__class__.__name__, sys.last_traceback)
+        if self.slackClient.rtm_connect():
+            while True:
+                events = self.slackClient.rtm_read()
+                for event in events:
+                    self.processUpdate(self.convertToUpdate(event))
+                time.sleep(0.5)
+        # try:
+        # except:
+        #     Utils.logError(self, self.__class__.__name__, sys.exc_info())

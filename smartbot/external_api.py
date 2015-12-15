@@ -107,7 +107,7 @@ class ExternalAPI:
         response = requests.get('http://api.wolframalpha.com/v2/query?input=%s&appid=%s' % (quote(query), appId))
         try:
             tree = etree.fromstring(response.content)
-            results = tree.xpath('//pod[contains(@scanner, "Data") or contains(@title, "Result")]/subpod/plaintext')
+            results = tree.xpath('//pod[contains(@scanner, "Data") or contains(@title, "Result") or contains(@title, "Solution")]/subpod/plaintext')
             if len(results) >= 0 and results[0].text and results[0].text.strip():
                 return results[0].text.decode('utf-8')
             else:

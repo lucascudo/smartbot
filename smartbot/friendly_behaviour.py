@@ -5,6 +5,7 @@ from smartbot import ExternalAPI
 
 import re
 import os
+import random
 from threading import Thread
 
 class DynObject(object):
@@ -17,11 +18,18 @@ class FriendlyBehaviour(Behaviour):
         super(FriendlyBehaviour, self).__init__(bot)
         self.behaviourControl = behaviourControl
         self.vocabulary = vocabulary
+        self._defaultAnswers = [
+              u'Prefiro não comentar',
+              u'Não tenho informações suficientes na minha base para responder essa pergunta',
+              u'Não sei (ainda)',
+              u'Estou em fase de crescimento',
+              u'Me pergunte amanhã'
+            ]
 
     def addHandlers(self):
         info = self.bot.getInfo()
         self.botInfo = info
-        self.mentionMatcher = re.compile('.*(^|\W)@?(%s|%s|%s)(\W|$).*' % (info.id, info.username, info.username.lower().replace('bot', '')), re.IGNORECASE)
+        self.mentionMatcher = re.compile('.*(^|\W)@?(%s|%s)(\W|$).*' % (info.id, info.username), re.IGNORECASE)
         self.bot.addMessageHandler(self.mention)
 
     def removeHandlers(self):
@@ -39,6 +47,7 @@ class FriendlyBehaviour(Behaviour):
             self.logDebug(u'Friendly mention (chat_id: %s, command: %s, params: %s)' % (update.message.chat_id, command, (' ').join(params or ['None'])))
             updateMock = DynObject()
             updateMock.message = DynObject()
+            updateMock.message.user = update.message.user
             updateMock.message.chat_id = update.message.chat_id
             updateMock.message.text = '/%s %s' % (command, ' '.join(params))
             self.bot.dispatchCommand(updateMock, command)
@@ -60,9 +69,13 @@ class FriendlyBehaviour(Behaviour):
                 result = results[0]
                 self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: %s, choosen: %s)' % (update.message.chat_id, sentence, sentenceEnglish, results, result['source']))
                 answerEnglish = result['answer']
+                answerEnglish = re.sub('My creators are the company Evi \(formerly known as True Knowledge\), a semantic technology company based in Cambridge, UK', 'OLX Inc', answerEnglish)
+                answerEnglish = re.sub('UK company', 'company', answerEnglish)
+                answerEnglish = re.sub('Evi \(formerly known as True Knowledge\)', 'OLX Inc', answerEnglish)
+                answerEnglish = re.sub('Stephen Wolfram', 'OLX Inc', answerEnglish)
                 answerEnglish = re.sub('(Wolfram\|Alpha|Evi)', self.bot.getInfo().username, answerEnglish)
                 answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')
                 self.bot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
             else:
                 self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: None)' % (update.message.chat_id, sentence, sentenceEnglish))
-                self.bot.sendMessage(chat_id=update.message.chat_id, text=u'Prefiro não comentar')
+                self.bot.sendMessage(chat_id=update.message.chat_id, text=random.choice(self._defaultAnswers))
