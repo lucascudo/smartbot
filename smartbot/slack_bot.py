@@ -147,11 +147,15 @@ class SlackBot(Bot):
         return update
 
     def listen(self):
+        lastPing = datetime.datetime.now()
         if self.slackClient.rtm_connect():
             while True:
                 events = self.slackClient.rtm_read()
                 for event in events:
                     self.processUpdate(self.convertToUpdate(event))
+                if (datetime.datetime.now() - lastPing).total_seconds() > 60:
+                    self.slackClient.server.ping()
+                    lastPing = datetime.datetime.now()
                 time.sleep(0.5)
         # try:
         # except:
