@@ -40,9 +40,9 @@ class FriendlyBehaviour(Behaviour):
         words = re.compile('\s+', re.UNICODE).split(message)
         words = filter(lambda word: word.strip() and not self.mentionMatcher.match(word), words)
         words = map(lambda word: word.lower(), words)
-        keywords = self.vocabulary.keys()
-        if len(words) >= 1 and words[0] in keywords:
-            command = self.vocabulary[words[0]]
+        aliases = self.vocabulary.get('aliases')
+        if aliases and len(words) >= 1 and words[0] in aliases.keys():
+            command = aliases[words[0]]
             params = words[1:]
             self.logDebug(u'Friendly mention (chat_id: %s, command: %s, params: %s)' % (update.message.chat_id, command, (' ').join(params or ['None'])))
             updateMock = DynObject()
@@ -69,13 +69,15 @@ class FriendlyBehaviour(Behaviour):
                 result = results[0]
                 self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: %s, choosen: %s)' % (update.message.chat_id, sentence, sentenceEnglish, results, result['source']))
                 answerEnglish = result['answer']
-                answerEnglish = re.sub('My creators are the company Evi \(formerly known as True Knowledge\), a semantic technology company based in Cambridge, UK', 'OLX Inc', answerEnglish)
-                answerEnglish = re.sub('UK company', 'company', answerEnglish)
-                answerEnglish = re.sub('Evi \(formerly known as True Knowledge\)', 'OLX Inc', answerEnglish)
-                answerEnglish = re.sub('Stephen Wolfram', 'OLX Inc', answerEnglish)
-                answerEnglish = re.sub('(Wolfram\|Alpha|Evi)', self.bot.getInfo().username, answerEnglish)
+                replacements = self.vocabulary.get('replacements') or {}
+                for search in replacements.keys():
+                    replacement = replacements[search]
+                    if not callable(replacement):
+                        answerEnglish = re.sub(search, replacement, answerEnglish)
+                    else:
+                        answerEnglish = re.sub(search, replacement(), answerEnglish)
                 answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')
-                self.bot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
+                self.bot.sendMessage(chat_id=update.message.chat_id, text=(answerPortuguese or answerEnglish))
             else:
                 self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: None)' % (update.message.chat_id, sentence, sentenceEnglish))
                 self.bot.sendMessage(chat_id=update.message.chat_id, text=random.choice(self._defaultAnswers))

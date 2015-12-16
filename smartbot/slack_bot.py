@@ -20,8 +20,8 @@ class SlackBot(Bot):
             self._channelInfoCache[channel] = json.loads(self.slackClient.api_call('channels.info', channel=channel)).get('channel')
         return self._channelInfoCache.get(channel)
 
-    def __init__(self, token):
-        super(SlackBot, self).__init__(token)
+    def __init__(self, adminId, token):
+        super(SlackBot, self).__init__(adminId, token)
         self.baseUrl = 'https://slack.com/api'
         self.slackClient = slackclient.SlackClient(token)
         self._commandMatcher = re.compile('^_(\w+)( .*)?$')
@@ -113,7 +113,7 @@ class SlackBot(Bot):
     def dispatchCommand(self, update, command=None):
         dispatched = False
         commandMatches = self._commandMatcher.match(update.message.text)
-        if update.message.user == 'U02LQ47L4' and command or commandMatches:
+        if command or commandMatches:
             for commandHandler in self._commandHandlers:
                 commandCurrent = commandHandler[0]
                 handler = commandHandler[1]
@@ -127,8 +127,8 @@ class SlackBot(Bot):
             info = self.getInfo()
             channelInfo = self._getChannelInfo(update.message.chat_id)
             maxMembers = 4
-            if update.message.user == 'U02LQ47L4' or (channelInfo and len(channelInfo['members'])) >= maxMembers:
-                if not self.dispatchCommand(update):
+            if update.message.user == self.adminId or (channelInfo and len(channelInfo['members'])) >= maxMembers:
+                if not (update.message.user == self.adminId and self.dispatchCommand(update)):
                     self.dispatchMessage(update)
                     self.dispatchRegex(update)
             else:

@@ -6,8 +6,8 @@ import telegram
 from smartbot import Bot
 
 class TelegramBot(Bot):
-    def __init__(self, token):
-        super(TelegramBot, self).__init__(token)
+    def __init__(self, adminId, token):
+        super(TelegramBot, self).__init__(adminId, token)
         self.baseUrl = 'https://api.telegram.org/bot%s' % token
         self.telegramBot = telegram.Bot(token=token)
         self.updater = telegram.Updater(token=token)
