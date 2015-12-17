@@ -12,14 +12,26 @@ from lxml import html
 from urllib import (quote, quote_plus)
 
 class ExternalAPI:
+    bingAppId = None
+
+    @staticmethod
+    def getBingAppId():
+        if not ExternalAPI.bingAppId:
+            headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
+            response = requests.get('http://www.bing.com/translator/dynamic/226010/js/LandingPage.js?loc=pt&phenabled=&rttenabled=&v=226010', headers=headers)
+            match = re.match('.*rttAppId:"([^"]+)".*', response.text)
+            ExternalAPI.bingAppId = match.groups()[0] if match else None
+        return ExternalAPI.bingAppId
+
     @staticmethod
     def translate(text, fromLanguage='en', toLanguage=None):
         if not toLanguage:
             toLanguage = 'pt' if fromLanguage == 'en' else 'en'
+        bingAppId = ExternalAPI.getBingAppId()
         text = text.encode('utf-8')
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
         text = re.sub('\s+', ' ', text, re.UNICODE)
-        translateUrl = 'http://api.microsofttranslator.com/v2/ajax.svc/TranslateArray2?appId=%22THoADv4MA_Oh9P3cWQ7eNVzMcr-oVXpExEQiCfNJEI-6TgSf7bNEzOjodQlMWLZzL%22&texts=%5B%22' + quote_plus(text) + '%22%5D&from=%22' + fromLanguage + '%22&to=%22' + toLanguage + '%22&options=%7B%7D&oncomplete=onComplete_19&onerror=onError_19&_=1450313639189'
+        translateUrl = 'http://api.microsofttranslator.com/v2/ajax.svc/TranslateArray2?appId=%22' + bingAppId + '%22&texts=%5B%22' + quote_plus(text) + '%22%5D&from=%22' + fromLanguage + '%22&to=%22' + toLanguage + '%22&options=%7B%7D&oncomplete=onComplete_19&onerror=onError_19&_=1450313639189'
         response = requests.get(translateUrl, headers=headers)
         match = re.match('.*TranslatedText":"(.*)","TranslatedTextSentenceLengths.*', response.text, re.UNICODE)
         result = unicode(match.groups()[0]) if match else None
