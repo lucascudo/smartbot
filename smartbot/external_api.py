@@ -48,7 +48,7 @@ class ExternalAPI:
         words = filter(lambda word: word.strip(), words)
         if len(words) < 50:
             bingAppId = ExternalAPI.getBingAppId()
-            bingLanguage = 'pt-BR' if language = 'pt' else 'en-US'
+            bingLanguage = 'pt-BR' if language == 'pt' else 'en-US'
             ttsUrl = 'http://api.microsofttranslator.com/v2/http.svc/speak?appId=' + bingAppId + '&language=' + bingLanguage + '&format=audio/mp3&options=MinSize|male&text=' + quote(text)
             response = requests.get(ttsUrl, headers=headers)
             fd.write(response.content)
