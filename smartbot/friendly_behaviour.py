@@ -20,7 +20,7 @@ class FriendlyBehaviour(Behaviour):
         self.vocabulary = vocabulary
         self._defaultAnswers = [
               u'Prefiro não comentar',
-              u'Não tenho informações suficientes na minha base para responder essa pergunta',
+              u'Não tenho informações suficientes na minha base para responder',
               u'Não sei (ainda)',
               u'Estou em fase de crescimento',
               u'Me pergunte amanhã'

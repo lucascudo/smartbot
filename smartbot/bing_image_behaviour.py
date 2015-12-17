@@ -23,4 +23,4 @@ class BingImageBehaviour(Behaviour):
         if imageSources:
             self.bot.sendMessage(chat_id=update.message.chat_id, text=imageSources[0])
         else:
-            self.bot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei imagem relacionada')
+            self.bot.sendMessage(chat_id=update.message.chat_id, text=u'Não encontrei imagem relacionada')

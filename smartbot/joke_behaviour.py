@@ -42,6 +42,6 @@ class JokeBehaviour(Behaviour):
                 if os.path.exists(audioFile) and os.path.getsize(audioFile) > 0:
                     self.bot.sendAudio(chat_id=update.message.chat_id, audio=audioFile, performer=self.bot.getInfo().username)
                 else:
-                    self.bot.sendMessage(chat_id=update.message.chat_id, text='Não consigo contar')
+                    self.bot.sendMessage(chat_id=update.message.chat_id, text=u'Não consigo contar')
             else:
-                self.bot.sendMessage(chat_id=update.message.chat_id, text='Não encontrei piada curta')
+                self.bot.sendMessage(chat_id=update.message.chat_id, text=u'Não encontrei piada curta')
