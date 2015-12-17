@@ -9,7 +9,7 @@ import subprocess
 import requests
 from lxml import etree
 from lxml import html
-from urllib import quote
+from urllib import (quote, quote_plus)
 
 class ExternalAPI:
     @staticmethod
@@ -19,22 +19,10 @@ class ExternalAPI:
         text = text.encode('utf-8')
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
         text = re.sub('\s+', ' ', text, re.UNICODE)
-        response = requests.get('https://translate.google.com/translate_a/single?client=t&sl=' + fromLanguage + '&tl=' + toLanguage + '&hl=en&dt=bd&dt=ex&dt=ld&dt=md&dt=qca&dt=rw&dt=rm&dt=ss&dt=t&dt=at&ie=UTF-8&oe=UTF-8&otf=1&ssel=6&tsel=3&kc=7&tk=3271.403467&q=' + quote(text), headers=headers)
-        try:
-            piecesRaw = response.text
-            piecesRawFirst = re.split('(\[\[|\]\])', piecesRaw)[2]
-            piecesRawFirst = re.sub(',{2,}', ',', piecesRawFirst)
-            piecesRawFirst = piecesRawFirst + ']'
-            piecesRawFirst = re.sub('\[,', '[', piecesRawFirst)
-            piecesRawFirst = re.sub(',\]', ']', piecesRawFirst)
-            pieces = eval('[%s]' % piecesRawFirst)
-            result = text
-            for piece in pieces:
-                if type(piece) is list and len(piece) >= 2:
-                    result = result.replace(piece[1], piece[0], 1)
-            result = result.decode('utf-8')
-        except:
-            result = None
+        translateUrl = 'http://api.microsofttranslator.com/v2/ajax.svc/TranslateArray2?appId=%22THoADv4MA_Oh9P3cWQ7eNVzMcr-oVXpExEQiCfNJEI-6TgSf7bNEzOjodQlMWLZzL%22&texts=%5B%22' + quote_plus(text) + '%22%5D&from=%22' + fromLanguage + '%22&to=%22' + toLanguage + '%22&options=%7B%7D&oncomplete=onComplete_19&onerror=onError_19&_=1450313639189'
+        response = requests.get(translateUrl, headers=headers)
+        match = re.match('.*TranslatedText":"(.*)","TranslatedTextSentenceLengths.*', response.text, re.UNICODE)
+        result = unicode(match.groups()[0]) if match else None
         return result
 
     @staticmethod

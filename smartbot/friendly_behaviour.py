@@ -47,7 +47,7 @@ class FriendlyBehaviour(Behaviour):
             self.logDebug(u'Friendly mention (chat_id: %s, command: %s, params: %s)' % (update.message.chat_id, command, (' ').join(params or ['None'])))
             updateMock = DynObject()
             updateMock.message = DynObject()
-            updateMock.message.user = update.message.user
+            # updateMock.message.user = update.message.user
             updateMock.message.chat_id = update.message.chat_id
             updateMock.message.text = '/%s %s' % (command, ' '.join(params))
             self.bot.dispatchCommand(updateMock, command)
@@ -57,16 +57,17 @@ class FriendlyBehaviour(Behaviour):
             sentence = ' '.join(words)
             bc = self.behaviourControl
             results = []
+            sentenceEnglish = ExternalAPI.translate(sentence, fromLanguage='pt') or ''
             target = lambda behaviour, sentence: bc.getStatus(behaviour) == 'loaded' and results.append({'source': behaviour, 'answer': bc.get(behaviour).query(sentence)})
-            t1 = Thread(target=target, args=('evi', sentence))
-            t2 = Thread(target=target, args=('wolfram', sentence))
+            t1 = Thread(target=target, args=('evi', sentenceEnglish))
+            t2 = Thread(target=target, args=('wolfram', sentenceEnglish))
             map(lambda t: t.start(), [t1, t2])
             map(lambda t: t.join(), [t1, t2])
             results = filter(lambda result: result['answer'] and result['answer'].strip(), results)
             results = sorted(results, lambda x, y: len(x['answer']) - len(y['answer']))
             if results:
                 result = results[0]
-                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, answers: %s, choosen: %s)' % (update.message.chat_id, sentence, results, result['source']))
+                self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: %s, choosen: %s)' % (update.message.chat_id, sentence, sentenceEnglish, results, result['source']))
                 answerEnglish = result['answer']
                 replacements = self.vocabulary.get('replacements') or {}
                 for search in replacements.keys():

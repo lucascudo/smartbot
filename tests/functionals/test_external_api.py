@@ -17,17 +17,17 @@ class TestExternalAPI(unittest.TestCase):
     def testTranslateShortInvalidWord(self):
         sentence = 'pi'
         result = ExternalAPI.translate(sentence)
-        self.assertEqual(result, 'pi')
+        self.assertEqual(result, 'PI')
 
     def testTranslateSimpleSentence(self):
         sentence = u'O que é carro ?'
         result = ExternalAPI.translate(sentence, fromLanguage='pt')
-        self.assertEqual(result, 'What car?')
+        self.assertEqual(result, 'What is a car?')
 
     def testTranslateComplex(self):
         sentence = 'The fox jumps. But who the hell is the fox ? I don\'t know'
         result = ExternalAPI.translate(sentence)
-        self.assertEqual(result, 'A raposa salta .  Mas quem diabos \xc3\xa9 a raposa ?  Eu n\xc3\xa3o sei')
+        self.assertEqual(result, u'A raposa salta. Mas quem \xe9 a raposa? Eu n\xe3o sei')
 
     def textTextToSpeechAsMP3(self):
         sentence = 'ok'
