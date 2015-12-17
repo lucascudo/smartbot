@@ -25,8 +25,6 @@ class EviBehaviour(Behaviour):
         answerEnglish = self.query(queryEnglish)
         answerEnglish = (answerEnglish or '').replace('\n', '. ')
         if answerEnglish:
-            answerPortuguese = ExternalAPI.translate(answerEnglish, fromLanguage='en')
-            if answerPortuguese:
-                self.bot.sendMessage(chat_id=update.message.chat_id, text=answerPortuguese)
-            else:
-                self.bot.sendMessage(chat_id=update.message.chat_id, text=u'Não entendi')
+            self.bot.sendMessage(chat_id=update.message.chat_id, text=answerEnglish)
+        else:
+            self.bot.sendMessage(chat_id=update.message.chat_id, text=u'Não entendi')
