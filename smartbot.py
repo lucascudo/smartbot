@@ -17,18 +17,17 @@ slack_token = args.slack_bot_token or os.environ.get('SLACK_BOT_TOKEN')
 wolfram_app_id = args.wolfram_app_id or os.environ.get('WOLFRAM_APP_ID')
 admin_id = args.admin_id or os.environ.get('ADMIN_ID')
 
-if not telegram_token and not slack_token:
-    sys.stderr.write('Please set the telegram/slack token (see --help for details).\n')
-    exit(0)
-
 if telegram_token and slack_token:
     sys.stderr.write('There are already telegram and slack token set. Please choose only one (see --help for details).\n')
     exit(0)
 
 if telegram_token:
-    bot = smartbot.TelegramBot(admin_id, telegram_token)
+    bot = smartbot.TelegramBot(telegram_token, admin_id)
 elif slack_token:
-    bot = smartbot.SlackBot(admin_id, slack_token)
+    bot = smartbot.SlackBot(slack_token, admin_id)
+else:
+    sys.stderr.write('Please set the telegram/slack token (see --help for details).\n')
+    exit(0)
 
 vocabulary = {
     'aliases': {

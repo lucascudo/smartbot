@@ -20,8 +20,8 @@ class SlackBot(Bot):
             self._channelInfoCache[channel] = json.loads(self.slackClient.api_call('channels.info', channel=channel)).get('channel')
         return self._channelInfoCache.get(channel)
 
-    def __init__(self, adminId, token):
-        super(SlackBot, self).__init__(adminId, token)
+    def __init__(self, token, adminId=None):
+        super(SlackBot, self).__init__(token, adminId)
         self.baseUrl = 'https://slack.com/api'
         self.slackClient = slackclient.SlackClient(token)
         self._commandMatcher = re.compile('^_(\w+)( .*)?$')
