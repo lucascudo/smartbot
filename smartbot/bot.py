@@ -4,7 +4,7 @@ import io
 import requests
 
 class Bot(object):
-    def __init__(self, adminId, token):
+    def __init__(self, token, adminId=None):
         self.adminId = adminId
         self.token = token
 

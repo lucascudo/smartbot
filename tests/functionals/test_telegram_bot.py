@@ -3,18 +3,18 @@
 import sys
 sys.path.append('.')
 
-from smartbot import Bot
+from smartbot import TelegramBot
 
 import unittest
 import os
 
-class TestBot(unittest.TestCase):
+class TestTelegramBot(unittest.TestCase):
     def setUp(self):
         self.token = os.environ.get('TELEGRAM_BOT_TOKEN')
         self.assertTrue(self.token, msg='The telegram token was not provided')
 
     def testGetInfo(self):
-        bot = Bot(self.token)
+        bot = TelegramBot(self.token)
         info = bot.getInfo()
         self.assertTrue(info.id)
         self.assertTrue(info.username)

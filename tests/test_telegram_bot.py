@@ -3,15 +3,15 @@
 import sys
 sys.path.append('.')
 
-from smartbot import Bot
+from smartbot import TelegramBot
 
 import unittest
 from mock import patch, Mock
 import os
 
-class TestBot(unittest.TestCase):
+class TestTelegramBot(unittest.TestCase):
     def testGetInfo(self):
-        bot = Bot('FAKE-TOKEN')
+        bot = TelegramBot('FAKE-TOKEN')
         info = Mock()
         bot.telegramBot = Mock()
         bot.telegramBot.getMe = Mock(return_value=info)
@@ -19,33 +19,33 @@ class TestBot(unittest.TestCase):
         self.assertEqual(infoResult, info)
 
     def testSendMessage(self):
-        bot = Bot('FAKE-TOKEN')
+        bot = TelegramBot('FAKE-TOKEN')
         params = { 'chat_id': 'a', 'text': 'b'}
         bot.telegramBot = Mock()
-        bot.telegramBot.sendMessage = Mock(return_value=True)
-        self.assertTrue(bot.sendMessage(**params))
+        bot.telegramBot.sendMessage = Mock()
+        self.assertIsNone(bot.sendMessage(**params))
         bot.telegramBot.sendMessage.assert_called_once_with(**params)
 
     def testSendVoice(self):
-        bot = Bot('FAKE-TOKEN')
+        bot = TelegramBot('FAKE-TOKEN')
         params = { 'chat_id': 'a', 'voice': 'b'}
         with patch('requests.post') as mockRequestPost, patch('__builtin__.open') as mockOpen:
-            mockRequestPost.return_value = True
-            self.assertTrue(bot.sendVoice(**params))
+            mockRequestPost.return_value = None
+            self.assertIsNone(bot.sendVoice(**params))
             mockOpen.assert_called_once_with('b', 'rb')
             self.assertEqual(mockRequestPost.call_count, 1)
 
     def testSendAudio(self):
-        bot = Bot('FAKE-TOKEN')
+        bot = TelegramBot('FAKE-TOKEN')
         params = { 'chat_id': 'a', 'audio': 'b'}
         with patch('requests.post') as mockRequestPost, patch('__builtin__.open') as mockOpen:
-            mockRequestPost.return_value = True
-            self.assertTrue(bot.sendAudio(**params))
+            mockRequestPost.return_value = None
+            self.assertIsNone(bot.sendAudio(**params))
             mockOpen.assert_called_once_with('b', 'rb')
             self.assertEqual(mockRequestPost.call_count, 1)
 
     def testListen(self):
-        bot = Bot('FAKE-TOKEN')
+        bot = TelegramBot('FAKE-TOKEN')
         bot.updater = Mock()
         bot.updater.start_polling = Mock()
         bot.listen()

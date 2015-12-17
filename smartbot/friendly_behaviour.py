@@ -47,7 +47,7 @@ class FriendlyBehaviour(Behaviour):
             self.logDebug(u'Friendly mention (chat_id: %s, command: %s, params: %s)' % (update.message.chat_id, command, (' ').join(params or ['None'])))
             updateMock = DynObject()
             updateMock.message = DynObject()
-            updateMock.message.user = update.message.user
+            # updateMock.message.user = update.message.user
             updateMock.message.chat_id = update.message.chat_id
             updateMock.message.text = '/%s %s' % (command, ' '.join(params))
             self.bot.dispatchCommand(updateMock, command)

@@ -4,10 +4,11 @@ import io
 import requests
 import telegram
 from smartbot import Bot
+from smartbot import Utils
 
 class TelegramBot(Bot):
-    def __init__(self, adminId, token):
-        super(TelegramBot, self).__init__(adminId, token)
+    def __init__(self, token, adminId=None):
+        super(TelegramBot, self).__init__(token, adminId)
         self.baseUrl = 'https://api.telegram.org/bot%s' % token
         self.telegramBot = telegram.Bot(token=token)
         self.updater = telegram.Updater(token=token)
@@ -31,12 +32,13 @@ class TelegramBot(Bot):
         self.dispatcher.removeTelegramCommandHandler(command, handler)
 
     def sendMessage(self, **kargs):
-        return self.telegramBot.sendMessage(**kargs)
+        Utils.logDebug(self, self.__class__.__name__, 'sendMessage %s' % kargs)
+        self.telegramBot.sendMessage(**kargs)
 
     def sendVoice(self, **kargs):
         files = { 'chat_id': ('', io.StringIO(unicode(str(kargs['chat_id'])))),
                 'voice': ('voice.ogg', open(kargs['voice'], 'rb'), 'application/octet-stream') }
-        return requests.post('%s/sendVoice' % self.baseUrl, files=files)
+        requests.post('%s/sendVoice' % self.baseUrl, files=files)
 
     def sendAudio(self, **kargs):
         files = { 'chat_id': ('', io.StringIO(unicode(str(kargs['chat_id'])))),
@@ -44,7 +46,7 @@ class TelegramBot(Bot):
                 'title': ('', io.StringIO(unicode(str(kargs.get('title') or 'talk')))),
                 'mime_type': ('', io.StringIO(u'audio/mpeg')),
                 'audio': ('audio.mp3', open(kargs['audio'], 'rb'), 'application/octet-stream') }
-        return requests.post('%s/sendAudio' % self.baseUrl, files=files)
+        requests.post('%s/sendAudio' % self.baseUrl, files=files)
 
     def dispatchMessage(self, update):
         self.dispatcher.dispatchTelegramMessage(update)
