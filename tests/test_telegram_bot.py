@@ -22,16 +22,16 @@ class TestTelegramBot(unittest.TestCase):
         bot = TelegramBot('FAKE-TOKEN')
         params = { 'chat_id': 'a', 'text': 'b'}
         bot.telegramBot = Mock()
-        bot.telegramBot.sendMessage = Mock(return_value=True)
-        self.assertTrue(bot.sendMessage(**params))
+        bot.telegramBot.sendMessage = Mock()
+        self.assertIsNone(bot.sendMessage(**params))
         bot.telegramBot.sendMessage.assert_called_once_with(**params)
 
     def testSendVoice(self):
         bot = TelegramBot('FAKE-TOKEN')
         params = { 'chat_id': 'a', 'voice': 'b'}
         with patch('requests.post') as mockRequestPost, patch('__builtin__.open') as mockOpen:
-            mockRequestPost.return_value = True
-            self.assertTrue(bot.sendVoice(**params))
+            mockRequestPost.return_value = None
+            self.assertIsNone(bot.sendVoice(**params))
             mockOpen.assert_called_once_with('b', 'rb')
             self.assertEqual(mockRequestPost.call_count, 1)
 
@@ -39,8 +39,8 @@ class TestTelegramBot(unittest.TestCase):
         bot = TelegramBot('FAKE-TOKEN')
         params = { 'chat_id': 'a', 'audio': 'b'}
         with patch('requests.post') as mockRequestPost, patch('__builtin__.open') as mockOpen:
-            mockRequestPost.return_value = True
-            self.assertTrue(bot.sendAudio(**params))
+            mockRequestPost.return_value = None
+            self.assertIsNone(bot.sendAudio(**params))
             mockOpen.assert_called_once_with('b', 'rb')
             self.assertEqual(mockRequestPost.call_count, 1)
 
