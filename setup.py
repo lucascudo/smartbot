@@ -2,11 +2,9 @@ import os
 
 from setuptools import setup, find_packages
 
-
 def read(*paths):
     with open(os.path.join(*paths), 'r') as f:
         return f.read()
-
 
 def requirements():
     requirements_list = []
@@ -14,7 +12,6 @@ def requirements():
     with open('requirements.txt') as requirements:
         for install in requirements:
             requirements_list.append(install.strip())
-
     return requirements_list
 
 setup(name='smartbot',
@@ -25,11 +22,16 @@ setup(name='smartbot',
       url='http://github.com/pedrohml/smartbot',
       author='Pedro Lira',
       author_email='pedrohml@gmail.com',
-      install_requires=requirements(),
       license='MIT',
+      install_requires=requirements(),
       packages=find_packages(exclude=['tests*']),
+      scripts=['scripts/smartbot'],
       zip_safe=False,
       include_package_data=True,
+      dependency_links=[
+              'http://github.com/leandrotoledo/python-telegram-bot/tarball/56ab40d#egg=python_telegram_bot-56ab40d',
+              'http://github.com/slackhq/python-slackclient/tarball/fc5af63#egg=python-slackclient-fc5af63'
+          ]
       classifiers=[
               'Development Status :: 5 - Production/Stable',
               'Intended Audience :: Developers',
