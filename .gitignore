@@ -1,7 +1,6 @@
 ENV/
 build/
 dist/
-smartbot.egg-info/
 *.swp
 *.pyc
 .coverage

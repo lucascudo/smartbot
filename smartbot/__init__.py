@@ -1,3 +1,10 @@
+#!/usr/bin/env python
+
+"""A library to build an enhanced bot to telegram and slack"""
+
+__author__ = 'pedrohml@gmail.com'
+__version__ = '0.1'
+
 from .utils import Utils
 from .external_api import ExternalAPI
 
@@ -18,3 +25,7 @@ from .friendly_behaviour import FriendlyBehaviour
 from .talk_behaviour import TalkBehaviour
 from .wolfram_behaviour import WolframBehaviour
 from .evi_behaviour import EviBehaviour
+
+__all__ = ['Utils', 'ExternalAPI', 'Bot', 'TelegramBot', 'SlackBot', 'BehaviourControl', 'Behaviour',
+'BasicBehaviour', 'LoaderBehaviour', 'GoogleImageBehaviour', 'BingImageBehaviour', 'TranslateBehaviour',
+'JokeBehaviour', 'NasaBehaviour', 'FriendlyBehaviour', 'TalkBehaviour', 'WolframBehaviour', 'EviBehaviour']
