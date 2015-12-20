@@ -24,7 +24,7 @@
 """A library to build an enhanced bot to telegram and slack"""
 
 __author__ = 'pedrohml@gmail.com'
-__version__ = '0.1'
+__version__ = '0.2'
 
 from .utils import Utils
 from .external_api import ExternalAPI
