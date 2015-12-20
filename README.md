@@ -1,5 +1,5 @@
 # Smartbot
-The smartest bot of telegram/slack
+The smartest bot for telegram/slack
 
 
 #### Description
@@ -17,5 +17,40 @@ The concept of **behaviours** makes easier to add costumizable features to your 
 - **Loader**: Enable/Disable behaviours on the fly.
 
 
-#README IN DEVELOPMENT
+#### Instalation
 
+You can install the through [pip](https://github.com/pypa/pip):
+```
+pip install smartbot
+```
+or inside directory (in case you downloaded the code):
+```
+python setup.py install
+```
+
+#### Usage
+
+```
+usage: smartbot.py [-h] [--telegram-bot-token TELEGRAM_BOT_TOKEN]
+                   [--slack-bot-token SLACK_BOT_TOKEN]
+                   [--wolfram-app-id WOLFRAM_APP_ID] [--admin-id ADMIN_ID]
+
+Run smartbot
+
+optional arguments:
+  -h, --help            show this help message and exit
+  --telegram-bot-token TELEGRAM_BOT_TOKEN
+                        The telegram bot token (or env[TELEGRAM_BOT_TOKEN])
+  --slack-bot-token SLACK_BOT_TOKEN
+                        The slack bot token (or env[SLACK_BOT_TOKEN])
+  --wolfram-app-id WOLFRAM_APP_ID
+                        The wolfram app id (or env[WOLFRAM_APP_ID])
+  --admin-id ADMIN_ID   The user id to admin (or env[ADMIN_ID])
+```
+
+#### Development
+You are free to contribute with this project and even fork it. Of cource, following the license instructions. We will be available as much as possible to solve any doubts or issues about this project.
+
+#### Documentation and Tests
+The code and wiki documentation are in development.
+The test suite is not that perfect, but we are in a pursuit to improve it. Manual tests confirm the project is stable enough to be in a public repository. Enjoy
