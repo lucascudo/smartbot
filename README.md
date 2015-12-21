@@ -31,7 +31,7 @@ python setup.py install
 #### Usage
 
 ```
-usage: smartbot.py [-h] [--telegram-bot-token TELEGRAM_BOT_TOKEN]
+usage: smartbot_full.py [-h] [--telegram-bot-token TELEGRAM_BOT_TOKEN]
                    [--slack-bot-token SLACK_BOT_TOKEN]
                    [--wolfram-app-id WOLFRAM_APP_ID] [--admin-id ADMIN_ID]
 
