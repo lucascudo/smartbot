@@ -51,6 +51,36 @@ optional arguments:
   --config CONFIG       The configuration file (or env[SMARTBOT_CONFIG])
 ```
 
+#### Configuration
+Since version 1.0 you can use configuration file to customize bot behaviour. Some configuration options are supported already (examples in *config* directory). The most important is the **language** option where you can set the country language to make the bot answer the questions appropriately. The configuration file is set with *--config* argument or environment variables (please see *--help* for details).
+
+```ini
+# set bot basic knowledge
+[main]
+creator = Pedro Lira
+language = pt-BR
+
+# redirect to behaviour when first interaction word is one of below
+[friendly_aliases]
+standup = jalk
+diga = talk
+fale = talk
+traduz = translateen
+traduza = translateen
+nasa = nasa
+piada = joke
+manda = gimage
+quero = bimage
+
+# Set default answers when bot does not have answer to that question
+[friendly]
+default_answer0 = Prefiro não comentar
+default_answer1 = Não tenho informações suficientes na minha base para responder
+default_answer2 = Não sei (ainda)
+default_answer3 = Estou em fase de crescimento
+default_answer4 = Me pergunte amanhã
+```
+
 #### Development
 You are free to contribute with this project and even fork it. Of cource, following the license instructions. We will be available as much as possible to solve any doubts or issues about this project.
 
