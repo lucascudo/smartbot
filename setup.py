@@ -25,6 +25,7 @@ setup(name='smartbot',
       install_requires=requirements(),
       packages=find_packages(exclude=['tests*']),
       scripts=['smartbot_full.py'],
+      data_files=[('config', ['config/smartbot_full.cfg', 'config/smartbot_full_ptBR.cfg'])],
       zip_safe=False,
       include_package_data=True,
       classifiers=[

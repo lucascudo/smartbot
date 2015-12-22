@@ -11,6 +11,7 @@ import random
 class JokeBehaviour(Behaviour):
     def __init__(self, bot):
         super(JokeBehaviour, self).__init__(bot)
+        self.language = self.bot.config.get('main', 'language') if self.bot.config.has_option('main', 'language') else 'en-US'
 
     def addHandlers(self):
         self.bot.addCommandHandler('joke', self.jokeSearch)
@@ -38,7 +39,7 @@ class JokeBehaviour(Behaviour):
             jokes = sorted(jokes, lambda x, y: len(x) - len(y))
             if jokes:
                 joke = jokes[0]
-                audioFile = ExternalAPI.textToSpeech(joke, language='pt', encode='mp3')
+                audioFile = ExternalAPI.textToSpeech(joke, language=self.language, encode='mp3')
                 if os.path.exists(audioFile) and os.path.getsize(audioFile) > 0:
                     self.bot.sendAudio(chat_id=update.message.chat_id, audio=audioFile, performer=self.bot.getInfo().username)
                 else:

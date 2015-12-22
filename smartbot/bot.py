@@ -2,14 +2,19 @@
 
 import io
 import requests
+import ConfigParser
 
 class Bot(object):
     def __init__(self, token, adminId=None):
         self.adminId = adminId
         self.token = token
+        self.config = ConfigParser.ConfigParser()
 
     def getInfo(self):
         raise NotImplementedError
+
+    def setConfigFile(self, configFile):
+        self.config.read(configFile)
 
     def addMessageHandler(self, handler):
         raise NotImplementedError

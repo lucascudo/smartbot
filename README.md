@@ -32,20 +32,23 @@ python setup.py install
 
 ```
 usage: smartbot_full.py [-h] [--telegram-bot-token TELEGRAM_BOT_TOKEN]
-                   [--slack-bot-token SLACK_BOT_TOKEN]
-                   [--wolfram-app-id WOLFRAM_APP_ID] [--admin-id ADMIN_ID]
+                        [--slack-bot-token SLACK_BOT_TOKEN]
+                        [--wolfram-app-id WOLFRAM_APP_ID]
+                        [--admin-id ADMIN_ID] [--config CONFIG]
 
 Run smartbot
 
 optional arguments:
   -h, --help            show this help message and exit
   --telegram-bot-token TELEGRAM_BOT_TOKEN
-                        The telegram bot token (or env[TELEGRAM_BOT_TOKEN])
+                        The telegram bot token (or
+                        env[SMARTBOT_TELEGRAM_TOKEN])
   --slack-bot-token SLACK_BOT_TOKEN
-                        The slack bot token (or env[SLACK_BOT_TOKEN])
+                        The slack bot token (or env[SMARTBOT_SLACK_TOKEN])
   --wolfram-app-id WOLFRAM_APP_ID
-                        The wolfram app id (or env[WOLFRAM_APP_ID])
-  --admin-id ADMIN_ID   The user id to admin (or env[ADMIN_ID])
+                        The wolfram app id (or env[SMARTBOT_WOLFRAM_APPID])
+  --admin-id ADMIN_ID   The user id to admin (or env[SMARTBOT_ADMIN_ID])
+  --config CONFIG       The configuration file (or env[SMARTBOT_CONFIG])
 ```
 
 #### Development

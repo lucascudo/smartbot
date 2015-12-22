@@ -24,21 +24,26 @@ class ExternalAPI:
         return ExternalAPI.bingAppId
 
     @staticmethod
-    def translate(text, fromLanguage='en', toLanguage=None):
+    def translate(text, fromLanguage='en-US', toLanguage=None):
         if not toLanguage:
-            toLanguage = 'pt' if fromLanguage == 'en' else 'en'
+            toLanguage = 'pt-BR' if fromLanguage == 'en-US' else 'en-US'
+        fromLanguage = fromLanguage[0:2]
+        toLanguage = toLanguage[0:2]
         bingAppId = ExternalAPI.getBingAppId()
         text = text.encode('utf-8')
-        headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
-        text = re.sub('\s+', ' ', text, re.UNICODE)
-        translateUrl = 'http://api.microsofttranslator.com/v2/ajax.svc/TranslateArray2?appId=%22' + bingAppId + '%22&texts=%5B%22' + quote_plus(text) + '%22%5D&from=%22' + fromLanguage + '%22&to=%22' + toLanguage + '%22&options=%7B%7D&oncomplete=onComplete_19&onerror=onError_19&_=1450313639189'
-        response = requests.get(translateUrl, headers=headers)
-        match = re.match('.*TranslatedText":"(.*)","TranslatedTextSentenceLengths.*', response.text, re.UNICODE)
-        result = unicode(match.groups()[0]) if match else None
+        if fromLanguage != toLanguage:
+            headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
+            text = re.sub('\s+', ' ', text, re.UNICODE)
+            translateUrl = 'http://api.microsofttranslator.com/v2/ajax.svc/TranslateArray2?appId=%22' + bingAppId + '%22&texts=%5B%22' + quote_plus(text) + '%22%5D&from=%22' + fromLanguage + '%22&to=%22' + toLanguage + '%22&options=%7B%7D&oncomplete=onComplete_19&onerror=onError_19&_=1450313639189'
+            response = requests.get(translateUrl, headers=headers)
+            match = re.match('.*TranslatedText":"(.*)","TranslatedTextSentenceLengths.*', response.text, re.UNICODE)
+            result = unicode(match.groups()[0]) if match else None
+        else:
+            result = text
         return result
 
     @staticmethod
-    def textToSpeech(text, language='pt', encode='mp3'):
+    def textToSpeech(text, language='pt-BR', encode='mp3'):
         headers = { 'User-Agent': 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_10_5) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/47.0.2526.73 Safari/537.36' }
         baseName = tempfile.mkstemp()[1]
         mp3Name = baseName + '.mp3'
@@ -48,7 +53,7 @@ class ExternalAPI:
         words = filter(lambda word: word.strip(), words)
         if len(words) < 50:
             bingAppId = ExternalAPI.getBingAppId()
-            bingLanguage = 'pt-BR' if language == 'pt' else 'en-US'
+            bingLanguage = 'pt-BR' if language == 'pt-BR' else 'en-US'
             ttsUrl = 'http://api.microsofttranslator.com/v2/http.svc/speak?appId=' + bingAppId + '&language=' + bingLanguage + '&format=audio/mp3&options=MinSize|male&text=' + quote(text)
             response = requests.get(ttsUrl, headers=headers)
             fd.write(response.content)
