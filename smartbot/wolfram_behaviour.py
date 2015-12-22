@@ -31,4 +31,4 @@ class WolframBehaviour(Behaviour):
         if answerEnglish:
             self.bot.sendMessage(chat_id=update.message.chat_id, text=answerEnglish)
         else:
-            self.bot.sendMessage(chat_id=update.message.chat_id, text=u'Não entendi')
+            self.bot.sendMessage(chat_id=update.message.chat_id, text=u'I did not understand')
