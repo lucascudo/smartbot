@@ -92,6 +92,9 @@ class SlackBot(Bot):
         kargs['filetype'] = 'mp3'
         self.sendFile(**kargs)
 
+    def executeRawCall(self, *args, **kargs):
+        self.slackClient.api_call(*args, **kargs)
+
     def dispatchMessage(self, update):
         dispatched = False
         for messageHandler in self._messageHandlers:

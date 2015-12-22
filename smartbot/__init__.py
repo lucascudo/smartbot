@@ -33,6 +33,7 @@ from .slack_bot import SlackBot
 from .behaviour_control import BehaviourControl
 from .behaviour import Behaviour
 from .basic_behaviour import BasicBehaviour
+from .raw_call_behaviour import RawCallBehaviour
 from .loader_behaviour import LoaderBehaviour
 from .google_image_behaviour import GoogleImageBehaviour
 from .bing_image_behaviour import BingImageBehaviour

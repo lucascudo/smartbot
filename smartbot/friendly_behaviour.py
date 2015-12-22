@@ -37,7 +37,7 @@ class FriendlyBehaviour(Behaviour):
         words = re.compile('\s+', re.UNICODE).split(message)
         words = filter(lambda word: word.strip() and not self.mentionMatcher.match(word), words)
         words = map(lambda word: word.lower(), words)
-        aliases = dict(self.bot.config.items('friendly_aliases')) if self.bot.config.has_section('friendly_aliases') else self.bot.config.has_section('friendly_aliases')
+        aliases = dict(self.bot.config.items('friendly-aliases')) if self.bot.config.has_section('friendly-aliases') else self.bot.config.has_section('friendly-aliases')
         if aliases and len(words) >= 1 and words[0] in aliases.keys():
             command = aliases[words[0]]
             params = words[1:]
@@ -50,7 +50,7 @@ class FriendlyBehaviour(Behaviour):
             updateMock.message.text = '/%s %s' % (command, ' '.join(params))
             self.bot.dispatchCommand(updateMock, command)
         elif len(words) == 1:
-            self.bot.sendMessage(chat_id=update.message.chat_id, text=random.choice(self._defaultAnswers))
+            self.bot.sendMessage(chat_id=update.message.chat_id, text=random.choice(self._defaultAnswers).decode('utf-8'))
         elif len(words) > 1:
             sentence = ' '.join(words)
             bc = self.behaviourControl
@@ -80,4 +80,4 @@ class FriendlyBehaviour(Behaviour):
                 self.bot.sendMessage(chat_id=update.message.chat_id, text=(answerNative or answerEnglish))
             else:
                 self.logDebug(u'Friendly answer (chat_id: %s, sentence: %s, sentenceEnglish: %s, answers: None)' % (update.message.chat_id, sentence, sentenceEnglish))
-                self.bot.sendMessage(chat_id=update.message.chat_id, text=random.choice(self._defaultAnswers))
+                self.bot.sendMessage(chat_id=update.message.chat_id, text=random.choice(self._defaultAnswers).decode('utf-8'))

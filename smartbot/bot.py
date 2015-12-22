@@ -1,6 +1,7 @@
 # coding: utf-8
 
 import io
+import codecs
 import requests
 import ConfigParser
 
