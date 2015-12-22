@@ -3,23 +3,23 @@ The smartest bot for telegram/slack
 
 
 #### Description
-Smartbot is a python library that helps to write enhanced bots to [Telegram](https://telegram.org/) / [Slack](https://slack.com/).
-The concept of **behaviours** makes easier to add costumizable features to your bot. Some features are already built-in in this package like:
-- **Wolfram**: Use wolfram knowledge system to query sentences; 
-- **Evi**: Use evi knowledge system query sentences;
+Smartbot is a python library that helps to write enhanced bots for [Telegram](https://telegram.org/) / [Slack](https://slack.com/).
+The concept of **behaviours** makes easier to add costumizable features to your bot. Some features are already built-in in this package:
+- **Wolfram**: Use Wolfram knowledge system to query sentences; 
+- **Evi**: Use Evi knowledge system query sentences;
 - **Google Image**: Use google image to search images;
 - **Bing Image**: Use bing image to search images;
 - **Translate**: Use bing translator to translate sentences;
 - **Talk**: Use bing text-to-speech to convert text in spoken sentences;
 - **Joke**: Use [PiadasNet](http://piadasnet.com) to search jokes;
 - **Nasa**: Retrieve [Nasa Image Of The Day](http://apod.nasa.gov/apod/astropix.html);
-- **Friendly**: Redirect metioned interaction to behaviours;
+- **Friendly**: Support seamless useo of knowledge systems like Wolfram, Evi and redirect configured mentions to behaviours;
 - **Loader**: Enable/Disable behaviours on the fly.
 
 
 #### Instalation
 
-You can install the through [pip](https://github.com/pypa/pip):
+You can install with [pip](https://github.com/pypa/pip):
 ```
 pip install smartbot
 ```
@@ -74,11 +74,11 @@ quero = bimage
 
 # Set default answers when bot does not have answer to that question
 [friendly]
-default_answer0 = Prefiro não comentar
-default_answer1 = Não tenho informações suficientes na minha base para responder
-default_answer2 = Não sei (ainda)
-default_answer3 = Estou em fase de crescimento
-default_answer4 = Me pergunte amanhã
+default-answer0 = Prefiro não comentar
+default-answer1 = Não tenho informações suficientes na minha base para responder
+default-answer2 = Não sei (ainda)
+default-answer3 = Estou em fase de crescimento
+default-answer4 = Me pergunte amanhã
 ```
 
 #### Development

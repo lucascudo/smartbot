@@ -48,7 +48,7 @@ class ExternalAPI:
         baseName = tempfile.mkstemp()[1]
         mp3Name = baseName + '.mp3'
         fd = file(mp3Name, 'ab')
-	text = text.encode('utf-8')
+        text = text.encode('utf-8')
         words = re.split('\s+', text, re.UNICODE)
         words = filter(lambda word: word.strip(), words)
         if len(words) < 50:

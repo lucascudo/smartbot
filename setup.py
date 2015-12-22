@@ -15,7 +15,7 @@ def requirements():
     return requirements_list
 
 setup(name='smartbot',
-      version="0.8",
+      version="1.0",
       description='The most smart bot in telegram and slack',
       keywords='python telegram slack bot smart api',
       url='http://github.com/pedrohml/smartbot',
@@ -39,9 +39,9 @@ setup(name='smartbot',
               'Programming Language :: Python :: 2',
               'Programming Language :: Python :: 2.6',
               'Programming Language :: Python :: 2.7',
-              'Programming Language :: Python :: 3',
-              'Programming Language :: Python :: 3.2',
-              'Programming Language :: Python :: 3.3',
-              'Programming Language :: Python :: 3.4',
+              # 'Programming Language :: Python :: 3',
+              # 'Programming Language :: Python :: 3.2',
+              # 'Programming Language :: Python :: 3.3',
+              # 'Programming Language :: Python :: 3.4',
       ]
 )

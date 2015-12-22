@@ -19,7 +19,7 @@ class FriendlyBehaviour(Behaviour):
         self.behaviourControl = behaviourControl
         self.language = self.bot.config.get('main', 'language') if self.bot.config.has_option('main', 'language') else 'en-US'
         if self.bot.config.has_section('friendly'):
-            self._defaultAnswers = [item[1] for item in self.bot.config.items('friendly') if re.match('^default_answer', item[0])]
+            self._defaultAnswers = [item[1] for item in self.bot.config.items('friendly') if re.match('^default-answer', item[0])]
         else:
             self._defaultAnswers = ['I don\'t know (yet)']
 
