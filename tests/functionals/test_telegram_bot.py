@@ -10,7 +10,7 @@ import os
 
 class TestTelegramBot(unittest.TestCase):
     def setUp(self):
-        self.token = os.environ.get('TELEGRAM_BOT_TOKEN')
+        self.token = os.environ.get('SMARTBOT_TELEGRAM_TOKEN')
         self.assertTrue(self.token, msg='The telegram token was not provided')
 
     def testGetInfo(self):

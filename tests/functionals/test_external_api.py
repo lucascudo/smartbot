@@ -11,7 +11,7 @@ import re
 
 class TestExternalAPI(unittest.TestCase):
     def setUp(self):
-        if not os.environ.get('WOLFRAM_APP_ID'):
+        if not os.environ.get('SMARTBOT_WOLFRAM_APPID'):
             sys.stderr.write('\nWARNING: The wolfram app id was not provided. Some tests will fail.\n')
 
     def testTranslateShortInvalidWord(self):
@@ -57,15 +57,15 @@ class TestExternalAPI(unittest.TestCase):
         self.assertTrue(result.get('explanation'))
 
     def testWolframQuery(self):
-        result = ExternalAPI.wolframQuery('who are you ?', os.environ.get('WOLFRAM_APP_ID'))
+        result = ExternalAPI.wolframQuery('who are you ?', os.environ.get('SMARTBOT_WOLFRAM_APPID'))
         self.assertEqual(result, 'My name is Wolfram|Alpha.')
 
     def testWolframQueryForMathInNumbers(self):
-        result = ExternalAPI.wolframQuery('calculate 1 + 1', os.environ.get('WOLFRAM_APP_ID'))
+        result = ExternalAPI.wolframQuery('calculate 1 + 1', os.environ.get('SMARTBOT_WOLFRAM_APPID'))
         self.assertEqual(result, '2')
 
     def testWolframQueryForMathInWords(self):
-        result = ExternalAPI.wolframQuery('calculate one plus one', os.environ.get('WOLFRAM_APP_ID'))
+        result = ExternalAPI.wolframQuery('calculate one plus one', os.environ.get('SMARTBOT_WOLFRAM_APPID'))
         self.assertEqual(result, '2')
 
     def testEviQuery(self):
