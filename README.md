@@ -110,4 +110,4 @@ You are free to contribute with this project and even fork it. Of cource, follow
 The code and wiki documentation are in development.
 The test suite is not that perfect, but we are in a pursuit to improve it. Manual tests confirm the project is stable enough to be in a public repository.
 
-Enjoy !!
+Enjoy !
