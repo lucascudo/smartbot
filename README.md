@@ -2,7 +2,7 @@
 The smartest bot for telegram/slack
 
  ![](https://img.shields.io/pypi/v/smartbot.png)
- ![](https://travis-ci.org/pedrohml/rmaze.png)
+ ![](https://img.shields.io/travis/pedrohml/smartbot.png)
  ![](https://img.shields.io/pypi/dm/smartbot.png)
  ![](https://img.shields.io/pypi/l/smartbot.png)
 
