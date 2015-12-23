@@ -1,6 +1,11 @@
 # Smartbot
 The smartest bot for telegram/slack
 
+ ![](https://img.shields.io/pypi/v/smartbot.png)
+ ![](https://travis-ci.org/pedrohml/rmaze.png)
+ ![](https://img.shields.io/pypi/dm/smartbot.png)
+ ![](https://img.shields.io/pypi/l/smartbot.png)
+
 #### Description
 Smartbot is a python library that helps to write enhanced bots for [Telegram](https://telegram.org/) / [Slack](https://slack.com/).
 The concept of **behaviours** makes easier to add costumizable features to your bot. Some features are already built-in in this package:
